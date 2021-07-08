@@ -43,7 +43,12 @@ def Your_highscore(score):
     dis.blit(value, [0, 50])
 
 
-def our_snake(snake_block, snake_list):
+def snake_1(snake_block, snake_list):
+    for x in snake_list:
+        pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
+
+
+def snake_2(snake_block, snake_list):
     for x in snake_list:
         pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
 
@@ -51,6 +56,12 @@ def our_snake(snake_block, snake_list):
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
     dis.blit(mesg, [dis_width / 6, dis_height / 3])
+
+
+def set_score(high_score, score):
+    # make function called set_scores(high_score, score)
+    Your_score(score)
+    Your_highscore(high_score)
 
 
 def gameLoop():
@@ -78,8 +89,9 @@ def gameLoop():
         while game_close == True:
             dis.fill(blue)
             message("You Lost! Press C-Play Again or Q-Quit", red)
-            Your_score(Length_of_snake - 1)
-            Your_highscore(high_score)
+            set_score(high_score, Length_of_snake - 1)
+            # Your_score(Length_of_snake - 1)
+            # Your_highscore(high_score)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -107,6 +119,19 @@ def gameLoop():
                 elif event.key == pygame.K_DOWN:
                     y1_change = snake_block
                     x1_change = 0
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    x1_change = -snake_block
+                    y1_change = 0
+                elif event.key == pygame.K_d:
+                    x1_change = snake_block
+                    y1_change = 0
+                elif event.key == pygame.K_w:
+                    y1_change = -snake_block
+                    x1_change = 0
+                elif event.key == pygame.K_s:
+                    y1_change = snake_block
+                    x1_change = 0
 
         if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
             game_close = True
@@ -125,9 +150,11 @@ def gameLoop():
             if x == snake_Head:
                 game_close = True
 
-        our_snake(snake_block, snake_List)
-        Your_score(Length_of_snake - 1)
-        Your_highscore(high_score)
+        snake_1(snake_block, snake_List)
+        set_score(high_score, Length_of_snake - 1)
+        # Your_score(Length_of_snake - 1)
+        # Your_highscore(high_score)
+        snake_2(snake_block, snake_List)
 
         pygame.display.update()
 
