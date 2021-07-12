@@ -34,13 +34,23 @@ score_font = pygame.font.SysFont("comicsansms", 35)
 
 
 def Your_score(score):
-    value = score_font.render("Your Score: " + str(score), True, yellow)
+    value = score_font.render("Player 1: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
 
 
 def Your_highscore(score):
-    value = score_font.render("High Score: " + str(score), True, red)
+    value = score_font.render("Player 1: " + str(score), True, red)
     dis.blit(value, [0, 50])
+
+
+def Your_score_2(score):
+    value = score_font.render("Player 2: " + str(score), True, yellow)
+    dis.blit(value, [900, 0])
+
+
+def Your_highscore_2(score):
+    value = score_font.render("Player 2: " + str(score), True, red)
+    dis.blit(value, [900, 50])
 
 
 def snake_1(snake_block, snake_list):
@@ -62,6 +72,8 @@ def set_score(high_score, score):
 
     Your_score(score)
     Your_highscore(high_score)
+    Your_score_2(score)
+    Your_highscore_2(high_score)
 
 
 def gameLoop():
