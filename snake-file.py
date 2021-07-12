@@ -95,10 +95,14 @@ def gameLoop():
         if Length_of_snake1 - 1 > high_score:
             high_score = Length_of_snake1 - 1
             pygame.display.update()
+        if Length_of_snake2 - 1 > high_score:
+            high_score = Length_of_snake2 - 1
+            pygame.display.update()
         while game_close == True:
             dis.fill(blue)
             message("You Lost! Press C-Play Again or Q-Quit", red)
             set_score(high_score, Length_of_snake1 - 1)
+            set_score(high_score, Length_of_snake2 - 1)
             pygame.display.update()
 
             for event in pygame.event.get():
