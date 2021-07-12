@@ -81,23 +81,24 @@ def gameLoop():
     x2_change = 0
     y2_change = 0
 
-    snake_List = []
-    Length_of_snake = 1
+    snake_List1 = []
+    snake_List2 = []
+
+    Length_of_snake1 = 1
+    Length_of_snake2 = 1
 
     foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
 
     while not game_over:
 
-        if Length_of_snake - 1 > high_score:
-            high_score = Length_of_snake - 1
+        if Length_of_snake1 - 1 > high_score:
+            high_score = Length_of_snake1 - 1
             pygame.display.update()
         while game_close == True:
             dis.fill(blue)
             message("You Lost! Press C-Play Again or Q-Quit", red)
-            set_score(high_score, Length_of_snake - 1)
-            # Your_score(Length_of_snake - 1)
-            # Your_highscore(high_score)
+            set_score(high_score, Length_of_snake1 - 1)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -153,20 +154,24 @@ def gameLoop():
         snake_Head1.append(y1)
         snake_Head2.append(x2)
         snake_Head2.append(y2)
-        snake_List.append(snake_Head1)
-        snake_List.append(snake_Head2)
-        if len(snake_List) > Length_of_snake:
-            del snake_List[0]
+        snake_List1.append(snake_Head1)
+        snake_List2.append(snake_Head2)
+        print(snake_List1)
+        if len(snake_List1) > Length_of_snake1:
+            del snake_List1[0]
+        if len(snake_List2) > Length_of_snake2:
+            del snake_List2[0]
 
-        for x in snake_List[:-1]:
-            if x == snake_Head1 or x == snake_Head2:
-                game_close = False
+        for x in snake_List1[:-1]:
+            if x == snake_Head1:
+                game_close = True
+        for x in snake_List2[:-1]:
+            if x == snake_Head2:
+                game_close = True
 
-        snake_1(snake_block, snake_List)
-        set_score(high_score, Length_of_snake - 1)
-        # Your_score(Length_of_snake - 1)
-        # Your_highscore(high_score)
-        snake_2(snake_block, snake_List)
+        snake_1(snake_block, snake_List1)
+        snake_2(snake_block, snake_List2)
+        set_score(high_score, Length_of_snake1 - 1)
 
         pygame.display.update()
 
@@ -175,7 +180,7 @@ def gameLoop():
                 0, dis_width - snake_block) / 10.0) * 10.0
             foody = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
-            Length_of_snake += 1
+            Length_of_snake1 += 1
 
         clock.tick(snake_speed)
 
