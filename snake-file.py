@@ -59,7 +59,7 @@ def message(msg, color):
 
 
 def set_score(high_score, score):
-    # make function called set_scores(high_score, score)
+
     Your_score(score)
     Your_highscore(high_score)
 
@@ -156,7 +156,7 @@ def gameLoop():
         snake_Head2.append(y2)
         snake_List1.append(snake_Head1)
         snake_List2.append(snake_Head2)
-        print(snake_List1)
+
         if len(snake_List1) > Length_of_snake1:
             del snake_List1[0]
         if len(snake_List2) > Length_of_snake2:
@@ -181,6 +181,12 @@ def gameLoop():
             foody = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake1 += 1
+        if x2 == foodx and y2 == foody:
+            foodx = round(random.randrange(
+                0, dis_width - snake_block) / 10.0) * 10.0
+            foody = round(random.randrange(
+                0, dis_height - snake_block) / 10.0) * 10.0
+            Length_of_snake2 += 1
 
         clock.tick(snake_speed)
 
