@@ -159,8 +159,8 @@ def gameLoop():
             del snake_List[0]
 
         for x in snake_List[:-1]:
-            if x == snake_Head1:
-                game_close = True
+            if x == snake_Head1 or x == snake_Head2:
+                game_close = False
 
         snake_1(snake_block, snake_List)
         set_score(high_score, Length_of_snake - 1)
