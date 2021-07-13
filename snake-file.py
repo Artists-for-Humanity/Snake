@@ -4,7 +4,7 @@ import time
 import random
 
 high_score = 0
-
+high_score2 = 0
 d = shelve.open('High_Score.txt')
 d['High_Score'] = high_score
 d.close()
@@ -53,12 +53,7 @@ def Your_highscore_2(score):
     dis.blit(value, [900, 50])
 
 
-def snake_1(snake_block, snake_list):
-    for x in snake_list:
-        pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
-
-
-def snake_2(snake_block, snake_list):
+def draw_snake(snake_block, snake_list):
     for x in snake_list:
         pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
 
@@ -69,15 +64,18 @@ def message(msg, color):
 
 
 def set_score(high_score, score):
-
     Your_score(score)
     Your_highscore(high_score)
+
+
+def set_score2(high_score, score):
     Your_score_2(score)
     Your_highscore_2(high_score)
 
 
 def gameLoop():
     global high_score
+    global high_score2
     game_over = False
     game_close = False
 
@@ -107,14 +105,14 @@ def gameLoop():
         if Length_of_snake1 - 1 > high_score:
             high_score = Length_of_snake1 - 1
             pygame.display.update()
-        if Length_of_snake2 - 1 > high_score:
-            high_score = Length_of_snake2 - 1
+        if Length_of_snake2 - 1 > high_score2:
+            high_score2 = Length_of_snake2 - 1
             pygame.display.update()
         while game_close == True:
             dis.fill(blue)
             message("You Lost! Press C-Play Again or Q-Quit", red)
             set_score(high_score, Length_of_snake1 - 1)
-            set_score(high_score, Length_of_snake2 - 1)
+            set_score2(high_score2, Length_of_snake2 - 1)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -156,21 +154,29 @@ def gameLoop():
                     y2_change = snake_block
                     x2_change = 0
 
-        if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0 or x1 >= dis_width or x2 < 0 or y1 >= dis_height or y2 < 0:
+        snake_offscreen1 = x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0
+        snake_offscreen2 = x2 >= dis_width or x2 < 0 or y2 >= dis_height or y2 < 0
+
+        if snake_offscreen1 or snake_offscreen2:
             game_close = True
+
         x1 += x1_change
         y1 += y1_change
         x2 += x2_change
         y2 += y2_change
         dis.fill(blue)
         pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
+
+        # build_snake(snake_Head1, snake_List1, x1, y1)
         snake_Head1 = []
-        snake_Head2 = []
         snake_Head1.append(x1)
         snake_Head1.append(y1)
+        snake_List1.append(snake_Head1)
+
+        # build_snake(snake_Head2, snake_List2, x2, y2)
+        snake_Head2 = []
         snake_Head2.append(x2)
         snake_Head2.append(y2)
-        snake_List1.append(snake_Head1)
         snake_List2.append(snake_Head2)
 
         if len(snake_List1) > Length_of_snake1:
@@ -185,9 +191,10 @@ def gameLoop():
             if x == snake_Head2:
                 game_close = True
 
-        snake_1(snake_block, snake_List1)
-        snake_2(snake_block, snake_List2)
+        draw_snake(snake_block, snake_List1)
+        draw_snake(snake_block, snake_List2)
         set_score(high_score, Length_of_snake1 - 1)
+        set_score2(high_score2, Length_of_snake2 - 1)
 
         pygame.display.update()
 
