@@ -1,5 +1,6 @@
 import shelve
 import pygame
+from pygame import mixer
 import time
 import random
 
@@ -31,6 +32,11 @@ snake_speed = 15
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
+
+# Background Music
+mixer.music.load(
+    'Gothic Storm Music- Red Harvest (2020 Epic Menacing Sinister Gothic Orchestral).wav')
+mixer.music.play(-1)
 
 
 def Your_score(score):
@@ -100,6 +106,12 @@ def gameLoop():
     foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
 
+    foodx2 = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+    foody2 = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+
+    foodx3 = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+    foody3 = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+
     while not game_over:
 
         if Length_of_snake1 - 1 > high_score:
@@ -165,7 +177,11 @@ def gameLoop():
         x2 += x2_change
         y2 += y2_change
         dis.fill(blue)
-        pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
+        pygame.draw.rect(dis, green, [foodx, foody,  snake_block, snake_block])
+        pygame.draw.rect(
+            dis, red, [foodx2, foody2,  snake_block, snake_block])
+        pygame.draw.rect(
+            dis, yellow, [foodx3, foody3,  snake_block, snake_block])
 
         # build_snake(snake_Head1, snake_List1, x1, y1)
         snake_Head1 = []
@@ -204,10 +220,39 @@ def gameLoop():
             foody = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake1 += 1
+
+        if x1 == foodx2 and y1 == foody2:
+            foodx2 = round(random.randrange(
+                0, dis_width - snake_block) / 10.0) * 10.0
+            foody2 = round(random.randrange(
+                0, dis_height - snake_block) / 10.0) * 10.0
+            Length_of_snake1 += 1
+
+        if x1 == foodx3 and y1 == foody3:
+            foodx3 = round(random.randrange(
+                0, dis_width - snake_block) / 10.0) * 10.0
+            foody3 = round(random.randrange(
+                0, dis_height - snake_block) / 10.0) * 10.0
+            Length_of_snake1 += 1
+
         if x2 == foodx and y2 == foody:
             foodx = round(random.randrange(
                 0, dis_width - snake_block) / 10.0) * 10.0
             foody = round(random.randrange(
+                0, dis_height - snake_block) / 10.0) * 10.0
+            Length_of_snake2 += 1
+
+        if x2 == foodx2 and y2 == foody2:
+            foodx2 = round(random.randrange(
+                0, dis_width - snake_block) / 10.0) * 10.0
+            foody2 = round(random.randrange(
+                0, dis_height - snake_block) / 10.0) * 10.0
+            Length_of_snake2 += 1
+
+        if x2 == foodx3 and y2 == foody3:
+            foodx3 = round(random.randrange(
+                0, dis_width - snake_block) / 10.0) * 10.0
+            foody3 = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake2 += 1
 
