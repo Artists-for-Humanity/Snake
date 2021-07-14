@@ -54,12 +54,12 @@ def Your_highscore(score):
 
 def Your_score_2(score):
     value = score_font.render("Player 2: " + str(score), True, yellow)
-    dis.blit(value, [900, 0])
+    dis.blit(value, [885, 0])
 
 
 def Your_highscore_2(score):
     value = score_font.render("Player 2: " + str(score), True, red)
-    dis.blit(value, [900, 50])
+    dis.blit(value, [885, 50])
 
 
 def draw_snake(snake_block, snake_list):
