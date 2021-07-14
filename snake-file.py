@@ -27,8 +27,11 @@ pygame.display.set_caption('Snake Game by Edureka')
 
 clock = pygame.time.Clock()
 
+
 snake_block = 10
 snake_speed = 15
+# snake_speed_1 = 15
+# snake_speed_2 = 15
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
@@ -82,6 +85,9 @@ def set_score2(high_score, score):
 def gameLoop():
     global high_score
     global high_score2
+    global snake_speed
+    global snake_speed_1
+    global snake_speed_2
     game_over = False
     game_close = False
 
@@ -113,7 +119,6 @@ def gameLoop():
     foody3 = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
 
     while not game_over:
-
         if Length_of_snake1 - 1 > high_score:
             high_score = Length_of_snake1 - 1
             pygame.display.update()
@@ -125,6 +130,9 @@ def gameLoop():
             message("You Lost! Press C-Play Again or Q-Quit", red)
             set_score(high_score, Length_of_snake1 - 1)
             set_score2(high_score2, Length_of_snake2 - 1)
+            snake_speed = 15
+            # snake_speed_1 = 15
+            # snake_speed_2 = 15
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -220,6 +228,8 @@ def gameLoop():
             foody = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake1 += 1
+            snake_speed = 20
+            # snake_speed_1 += 20
 
         if x1 == foodx2 and y1 == foody2:
             foodx2 = round(random.randrange(
@@ -227,6 +237,8 @@ def gameLoop():
             foody2 = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake1 += 1
+            snake_speed += 20
+            # snake_speed_1 += 0.2
 
         if x1 == foodx3 and y1 == foody3:
             foodx3 = round(random.randrange(
@@ -234,6 +246,8 @@ def gameLoop():
             foody3 = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake1 += 1
+            snake_speed += 20
+            # snake_speed_1 += 0.2
 
         if x2 == foodx and y2 == foody:
             foodx = round(random.randrange(
@@ -241,6 +255,8 @@ def gameLoop():
             foody = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake2 += 1
+            snake_speed += 20
+            # snake_speed_2 += 0.2
 
         if x2 == foodx2 and y2 == foody2:
             foodx2 = round(random.randrange(
@@ -248,6 +264,8 @@ def gameLoop():
             foody2 = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake2 += 1
+            snake_speed += 20
+            # snake_speed_2 += 0.2
 
         if x2 == foodx3 and y2 == foody3:
             foodx3 = round(random.randrange(
@@ -255,8 +273,10 @@ def gameLoop():
             foody3 = round(random.randrange(
                 0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake2 += 1
+            snake_speed += 20
+            # snake_speed_2 += 0.2
 
-        clock.tick(snake_speed)
+        clock.tick(snake_speed)  # snake_speed_1, snake_speed_2)
 
     pygame.quit()
     quit()
