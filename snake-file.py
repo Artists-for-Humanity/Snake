@@ -51,12 +51,12 @@ def Your_highscore(score):
 
 def Your_score_2(score):
     value = score_font.render("Player 2: " + str(score), True, yellow)
-    dis.blit(value, [900, 0])
+    dis.blit(value, [885, 0])
 
 
 def Your_highscore_2(score):
     value = score_font.render("Player 2: " + str(score), True, red)
-    dis.blit(value, [900, 50])
+    dis.blit(value, [885, 50])
 
 
 def draw_snake(snake_block, snake_list):
@@ -113,7 +113,6 @@ def gameLoop():
     foody3 = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
 
     while not game_over:
-
         if Length_of_snake1 - 1 > high_score:
             high_score = Length_of_snake1 - 1
             pygame.display.update()
