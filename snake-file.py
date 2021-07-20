@@ -100,7 +100,7 @@ def gameLoop():
     global snake_speed_1
     global snake_speed_2
     game_over = False
-    game_close = False
+    game_screen = 'Game' # 'Game' 'GameOver' 'Menu'
 
     x1 = dis_width / 2
     y1 = dis_height / 2
@@ -136,21 +136,19 @@ def gameLoop():
         if Length_of_snake2 - 1 > high_score2:
             high_score2 = Length_of_snake2 - 1
             pygame.display.update()
-        while game_close == True:
+        while game_screen == 'GameOver':
             dis.fill(blue)
             message("You Lost! Press C-Play Again or Q-Quit", red)
             set_score(high_score, Length_of_snake1 - 1)
             set_score2(high_score2, Length_of_snake2 - 1)
             snake_speed = 15
-            # snake_speed_1 = 15
-            # snake_speed_2 = 15
             pygame.display.update()
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         game_over = True
-                        game_close = False
+                        game_screen = 'Game'
                     if event.key == pygame.K_c:
 
                         gameLoop()
@@ -189,7 +187,7 @@ def gameLoop():
         snake_offscreen2 = x2 >= dis_width or x2 < 0 or y2 >= dis_height or y2 < 0
 
         if snake_offscreen1 or snake_offscreen2:
-            game_close = True
+            game_screen = 'GameOver'
 
         x1 += x1_change
         y1 += y1_change
@@ -221,10 +219,10 @@ def gameLoop():
 
         for x in snake_List1[:-1]:
             if x == snake_Head1:
-                game_close = True
+                game_screen = 'GameOver'
         for x in snake_List2[:-1]:
             if x == snake_Head2:
-                game_close = True
+                game_screen = 'GameOver'
 
         draw_snake(snake_block, snake_List1)
         draw_snake(snake_block, snake_List2)
