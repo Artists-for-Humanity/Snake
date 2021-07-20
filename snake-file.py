@@ -81,6 +81,7 @@ def set_score2(high_score, score):
     Your_score_2(score)
     Your_highscore_2(high_score)
 
+
 def check_if_over_food(x, y, foodx, foody, Length_of_snake, snake_speed):
     if x == foodx and y == foody:
         foodx = round(random.randrange(
@@ -90,6 +91,7 @@ def check_if_over_food(x, y, foodx, foody, Length_of_snake, snake_speed):
         Length_of_snake += 1
         snake_speed += 20
     return x, y, foodx, foody, Length_of_snake, snake_speed
+
 
 def gameLoop():
     global high_score
@@ -230,14 +232,20 @@ def gameLoop():
         set_score2(high_score2, Length_of_snake2 - 1)
 
         pygame.display.update()
-        
-        x1, y1, foodx, foody, Length_of_snake1, snake_speed = check_if_over_food(x1, y1, foodx, foody, Length_of_snake1, snake_speed)
-        x1, y1, foodx2, foody2, Length_of_snake1, snake_speed = check_if_over_food(x1, y1, foodx2, foody2, Length_of_snake1, snake_speed)
-        x1, y1, foodx3, foody3, Length_of_snake1, snake_speed = check_if_over_food(x1, y1, foodx3, foody3, Length_of_snake1, snake_speed)
 
-        x2, y2, foodx, foody, Length_of_snake2, snake_speed = check_if_over_food(x2, y2, foodx, foody, Length_of_snake2, snake_speed)
-        x2, y2, foodx2, foody2, Length_of_snake2, snake_speed = check_if_over_food(x2, y2, foodx2, foody2, Length_of_snake2, snake_speed)
-        x2, y2, foodx3, foody3, Length_of_snake2, snake_speed = check_if_over_food(x2, y2, foodx3, foody3, Length_of_snake2, snake_speed)
+        x1, y1, foodx, foody, Length_of_snake1, snake_speed = check_if_over_food(
+            x1, y1, foodx, foody, Length_of_snake1, snake_speed)
+        x1, y1, foodx2, foody2, Length_of_snake1, snake_speed = check_if_over_food(
+            x1, y1, foodx2, foody2, Length_of_snake1, snake_speed)
+        x1, y1, foodx3, foody3, Length_of_snake1, snake_speed = check_if_over_food(
+            x1, y1, foodx3, foody3, Length_of_snake1, snake_speed)
+
+        x2, y2, foodx, foody, Length_of_snake2, snake_speed = check_if_over_food(
+            x2, y2, foodx, foody, Length_of_snake2, snake_speed)
+        x2, y2, foodx2, foody2, Length_of_snake2, snake_speed = check_if_over_food(
+            x2, y2, foodx2, foody2, Length_of_snake2, snake_speed)
+        x2, y2, foodx3, foody3, Length_of_snake2, snake_speed = check_if_over_food(
+            x2, y2, foodx3, foody3, Length_of_snake2, snake_speed)
 
         clock.tick(snake_speed)
 
