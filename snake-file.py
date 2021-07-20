@@ -27,7 +27,6 @@ pygame.display.set_caption('Snake Game by Edureka')
 
 clock = pygame.time.Clock()
 
-
 snake_block = 10
 snake_speed = 15
 # snake_speed_1 = 15
@@ -35,6 +34,8 @@ snake_speed = 15
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
+
+game_screen = 'Menu' # 'Game' 'GameOver' 'Menu'
 
 # Background Music
 mixer.music.load(
@@ -99,8 +100,8 @@ def gameLoop():
     global snake_speed
     global snake_speed_1
     global snake_speed_2
+    global game_screen
     game_over = False
-    game_screen = 'Game' # 'Game' 'GameOver' 'Menu'
 
     x1 = dis_width / 2
     y1 = dis_height / 2
@@ -120,6 +121,8 @@ def gameLoop():
     Length_of_snake1 = 1
     Length_of_snake2 = 1
 
+    snake_speed = 15
+
     foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
 
@@ -136,12 +139,9 @@ def gameLoop():
         if Length_of_snake2 - 1 > high_score2:
             high_score2 = Length_of_snake2 - 1
             pygame.display.update()
-        while game_screen == 'GameOver':
+        while game_screen == 'Menu':
             dis.fill(blue)
-            message("You Lost! Press C-Play Again or Q-Quit", red)
-            set_score(high_score, Length_of_snake1 - 1)
-            set_score2(high_score2, Length_of_snake2 - 1)
-            snake_speed = 15
+            message("Welcome to the Creative Tech Snake Game! Press C to play or Q to quit", red)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -150,7 +150,23 @@ def gameLoop():
                         game_over = True
                         game_screen = 'Game'
                     if event.key == pygame.K_c:
+                        game_screen = 'Game'
+                        gameLoop()
 
+        while game_screen == 'GameOver':
+            dis.fill(blue)
+            message("You Lost! Press C-Play Again or Q-Quit", red)
+            set_score(high_score, Length_of_snake1 - 1)
+            set_score2(high_score2, Length_of_snake2 - 1)
+            pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        game_over = True
+                        game_screen = 'Game'
+                    if event.key == pygame.K_c:
+                        game_screen = 'Game'
                         gameLoop()
 
         for event in pygame.event.get():
