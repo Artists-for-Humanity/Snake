@@ -14,7 +14,7 @@ pygame.init()
 
 white = (255, 255, 255)
 yellow = (255, 255, 102)
-black = (0, 0, 0)
+black = '#222222'
 red = (213, 50, 80)
 green = (0, 255, 0)
 blue = (50, 153, 213)
@@ -22,7 +22,7 @@ blue = (50, 153, 213)
 dis_width = 1080
 dis_height = 900
 
-dis = pygame.display.set_mode((dis_width, dis_height))
+dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
 pygame.display.set_caption('Snake Game by Edureka')
 
 clock = pygame.time.Clock()
@@ -35,7 +35,7 @@ snake_speed = 15
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
 
-game_screen = 'Menu' # 'Game' 'GameOver' 'Menu'
+game_screen = 'Menu'  # 'Game' 'GameOver' 'Menu'
 
 # Background Music
 mixer.music.load(
@@ -65,7 +65,7 @@ def Your_highscore_2(score):
 
 def draw_snake(snake_block, snake_list):
     for x in snake_list:
-        pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
+        pygame.draw.rect(dis, green, [x[0], x[1], snake_block, snake_block])
 
 
 def message(msg, color):
@@ -101,6 +101,8 @@ def gameLoop():
     global snake_speed_1
     global snake_speed_2
     global game_screen
+    img = pygame.image.load('Images/Menu.png')
+
     game_over = False
 
     x1 = dis_width / 2
@@ -140,8 +142,12 @@ def gameLoop():
             high_score2 = Length_of_snake2 - 1
             pygame.display.update()
         while game_screen == 'Menu':
-            dis.fill(blue)
-            message("Welcome to the Creative Tech Snake Game! Press C to play or Q to quit", red)
+            dis.fill(black)
+            img_size = 600
+            dis.blit(img, ((dis_width/2) - img_size/2,
+                     (dis_height/2) - img_size/2, img_size, img_size))
+            # message(
+            # "Welcome to the Creative Tech Snake Game! Press C to play or Q to quit", white)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -154,7 +160,7 @@ def gameLoop():
                         gameLoop()
 
         while game_screen == 'GameOver':
-            dis.fill(blue)
+            dis.fill(black)
             message("You Lost! Press C-Play Again or Q-Quit", red)
             set_score(high_score, Length_of_snake1 - 1)
             set_score2(high_score2, Length_of_snake2 - 1)
@@ -209,8 +215,8 @@ def gameLoop():
         y1 += y1_change
         x2 += x2_change
         y2 += y2_change
-        dis.fill(blue)
-        pygame.draw.rect(dis, green, [foodx, foody,  snake_block, snake_block])
+        dis.fill(black)
+        pygame.draw.rect(dis, blue, [foodx, foody,  snake_block, snake_block])
         pygame.draw.rect(
             dis, red, [foodx2, foody2,  snake_block, snake_block])
         pygame.draw.rect(
