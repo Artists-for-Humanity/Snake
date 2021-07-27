@@ -22,7 +22,7 @@ blue = (50, 153, 213)
 dis_width = 1080
 dis_height = 900
 
-img = pygame.image.load('Images/Menu-debug.png')
+img = pygame.image.load('Images/StartScreenpsdNew.png')
 
 dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
 pygame.display.set_caption('Snake Game by Edureka')
@@ -144,9 +144,7 @@ def gameLoop():
             pygame.display.update()
         while game_screen == 'Menu':
             dis.fill(black)
-            img_size = 600
-            dis.blit(img, ((dis_width/2) - img_size/2,
-                     (dis_height/2) - img_size/2, img_size, img_size))
+            dis.blit(img, (0, 0))
             # message(
             # "Welcome to the Creative Tech Snake Game! Press C to play or Q to quit", white)
             pygame.display.update()
