@@ -22,6 +22,8 @@ blue = (50, 153, 213)
 dis_width = 1080
 dis_height = 900
 
+img = pygame.image.load('Images/Menu-debug.png')
+
 dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
 pygame.display.set_caption('Snake Game by Edureka')
 
@@ -101,7 +103,6 @@ def gameLoop():
     global snake_speed_1
     global snake_speed_2
     global game_screen
-    img = pygame.image.load('Images/Menu.png')
 
     game_over = False
 
