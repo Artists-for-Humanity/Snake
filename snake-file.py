@@ -29,8 +29,7 @@ clock = pygame.time.Clock()
 
 snake_block = 10
 snake_speed = 15
-# snake_speed_1 = 15
-# snake_speed_2 = 15
+snake_speed_mult = 1
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
@@ -83,23 +82,22 @@ def set_score2(high_score, score):
     Your_highscore_2(high_score)
 
 
-def check_if_over_food(x, y, foodx, foody, Length_of_snake, snake_speed):
+def check_if_over_food(x, y, foodx, foody, Length_of_snake, snake_speed, snake_speed_mult):
     if x == foodx and y == foody:
         foodx = round(random.randrange(
             0, dis_width - snake_block) / 10.0) * 10.0
         foody = round(random.randrange(
             0, dis_height - snake_block) / 10.0) * 10.0
         Length_of_snake += 1
-        snake_speed += 20
-    return x, y, foodx, foody, Length_of_snake, snake_speed
+        snake_speed_mult += 1
+    return x, y, foodx, foody, Length_of_snake, snake_speed, snake_speed_mult
 
 
 def gameLoop():
     global high_score
     global high_score2
     global snake_speed
-    global snake_speed_1
-    global snake_speed_2
+    global snake_speed_mult
     global game_screen
     img = pygame.image.load('Images/Menu.png')
 
@@ -124,6 +122,7 @@ def gameLoop():
     Length_of_snake2 = 1
 
     snake_speed = 15
+    snake_speed_mult = 1
 
     foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
@@ -180,29 +179,29 @@ def gameLoop():
                 game_over = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x1_change = -snake_block
+                    x1_change = -snake_block * snake_speed_mult
                     y1_change = 0
                 elif event.key == pygame.K_RIGHT:
-                    x1_change = snake_block
+                    x1_change = snake_block * snake_speed_mult
                     y1_change = 0
                 elif event.key == pygame.K_UP:
-                    y1_change = -snake_block
+                    y1_change = -snake_block * snake_speed_mult
                     x1_change = 0
                 elif event.key == pygame.K_DOWN:
-                    y1_change = snake_block
+                    y1_change = snake_block * snake_speed_mult
                     x1_change = 0
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
-                    x2_change = -snake_block
+                    x2_change = -snake_block * snake_speed_mult
                     y2_change = 0
                 elif event.key == pygame.K_d:
-                    x2_change = snake_block
+                    x2_change = snake_block * snake_speed_mult
                     y2_change = 0
                 elif event.key == pygame.K_w:
-                    y2_change = -snake_block
+                    y2_change = -snake_block * snake_speed_mult
                     x2_change = 0
                 elif event.key == pygame.K_s:
-                    y2_change = snake_block
+                    y2_change = snake_block * snake_speed_mult
                     x2_change = 0
 
         snake_offscreen1 = x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0
@@ -227,6 +226,7 @@ def gameLoop():
         snake_Head1.append(x1)
         snake_Head1.append(y1)
         snake_List1.append(snake_Head1)
+        print(snake_List1)
 
         # build_snake(snake_Head2, snake_List2, x2, y2)
         snake_Head2 = []
@@ -253,21 +253,21 @@ def gameLoop():
 
         pygame.display.update()
 
-        x1, y1, foodx, foody, Length_of_snake1, snake_speed = check_if_over_food(
-            x1, y1, foodx, foody, Length_of_snake1, snake_speed)
-        x1, y1, foodx2, foody2, Length_of_snake1, snake_speed = check_if_over_food(
-            x1, y1, foodx2, foody2, Length_of_snake1, snake_speed)
-        x1, y1, foodx3, foody3, Length_of_snake1, snake_speed = check_if_over_food(
-            x1, y1, foodx3, foody3, Length_of_snake1, snake_speed)
+        x1, y1, foodx, foody, Length_of_snake1, snake_speed, snake_speed_mult = check_if_over_food(
+            x1, y1, foodx, foody, Length_of_snake1, snake_speed, snake_speed_mult)
+        x1, y1, foodx2, foody2, Length_of_snake1, snake_speed, snake_speed_mult = check_if_over_food(
+            x1, y1, foodx2, foody2, Length_of_snake1, snake_speed, snake_speed_mult)
+        x1, y1, foodx3, foody3, Length_of_snake1, snake_speed, snake_speed_mult = check_if_over_food(
+            x1, y1, foodx3, foody3, Length_of_snake1, snake_speed, snake_speed_mult)
 
-        x2, y2, foodx, foody, Length_of_snake2, snake_speed = check_if_over_food(
-            x2, y2, foodx, foody, Length_of_snake2, snake_speed)
-        x2, y2, foodx2, foody2, Length_of_snake2, snake_speed = check_if_over_food(
-            x2, y2, foodx2, foody2, Length_of_snake2, snake_speed)
-        x2, y2, foodx3, foody3, Length_of_snake2, snake_speed = check_if_over_food(
-            x2, y2, foodx3, foody3, Length_of_snake2, snake_speed)
+        x2, y2, foodx, foody, Length_of_snake2, snake_speed, snake_speed_mult = check_if_over_food(
+            x2, y2, foodx, foody, Length_of_snake2, snake_speed, snake_speed_mult)
+        x2, y2, foodx2, foody2, Length_of_snake2, snake_speed, snake_speed_mult = check_if_over_food(
+            x2, y2, foodx2, foody2, Length_of_snake2, snake_speed, snake_speed_mult)
+        x2, y2, foodx3, foody3, Length_of_snake2, snake_speed, snake_speed_mult = check_if_over_food(
+            x2, y2, foodx3, foody3, Length_of_snake2, snake_speed, snake_speed_mult)
 
-        clock.tick(snake_speed)
+        clock.tick(15)
 
     pygame.quit()
     quit()
