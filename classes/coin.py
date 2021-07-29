@@ -1,49 +1,39 @@
 import pygame
 import sys
+from pathlib import Path
 
+base_path = Path(__file__).parent
+clock = pygame.time.Clock()
+
+coin_images = [
+    '../Images/coin0.png',
+    '../Images/coin1.png',
+    '../Images/coin2.png',
+    '../Images/coin3.png',
+    '../Images/coin4.png',
+    '../Images/coin5.png',
+    '../Images/coin6.png',
+]
 
 class Coin(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__()
         self.sprites = []
-        self.sprites.append(pygame.image.load(
-            '/Users/ctechmbp20b/Sites/Snake/Images/coin0.png'))
-        self.sprites.append(pygame.image.load(
-            '/Users/ctechmbp20b/Sites/Snake/Images/coin1.png'))
-        self.sprites.append(pygame.image.load(
-            '/Users/ctechmbp20b/Sites/Snake/Images/coin2.png'))
-        self.sprites.append(pygame.image.load(
-            '/Users/ctechmbp20b/Sites/Snake/Images/coin3.png'))
-        self.sprites.append(pygame.image.load(
-            '/Users/ctechmbp20b/Sites/Snake/Images/coin4.png'))
-        self.sprites.append(pygame.image.load(
-            '/Users/ctechmbp20b/Sites/Snake/Images/coin5.png'))
-        self.sprites.append(pygame.image.load(
-            '/Users/ctechmbp20b/Sites/Snake/Images/coin6.png'))
-        self.current_sprite = 0
-        self.image = self.sprites[self.current_sprite]
-
+        for image in coin_images:
+            self.sprites.append(pygame.image.load((base_path / image).resolve()))
+        
+        self.image = self.sprites[0]
         self.rect = self.image.get_rect()
         self.rect.topleft = (pos_x, pos_y)
-
-
-def coin(self):
-    self.coin_animation = True
-
-
-def update(self, speed):
-    if self.coin_animation == True:
-        self.current_sprite += speed
-        if int(self.current_sprite) >= len(self.sprites):
-            self.current_sprite = 0
-            self.coin_animation = False
-
-        self.image = self.sprites[int(self.current_sprite)]
+    
+    def update(self):
+        current_time = round(pygame.time.get_ticks() / 60)
+        spriteIndex = current_time % len(self.sprites)
+        self.image = self.sprites[spriteIndex]
 
 
 # General setup
 pygame.init()
-clock = pygame.time.Clock()
 
 # Game Screen
 screen_width = 400
@@ -64,6 +54,6 @@ while True:
     # Drawing
     screen.fill((0, 0, 0))
     moving_sprites.draw(screen)
-    # moving_sprites.update(0.25)
+    moving_sprites.update()
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(15)
