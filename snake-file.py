@@ -81,6 +81,10 @@ snake1 = Snake(pygame, dis, snake_block)
 snake2 = Snake(pygame, dis, snake_block)
 apple1 = Apple(pygame, dis, snake_block, red, get_random_position(
     dis_width), get_random_position(dis_height))
+apple2 = Apple(pygame, dis, snake_block, blue, get_random_position(
+    dis_width), get_random_position(dis_height))
+apple3 = Apple(pygame, dis, snake_block, yellow, get_random_position(
+    dis_width), get_random_position(dis_height))
 
 
 def gameLoop():
@@ -90,6 +94,8 @@ def gameLoop():
     global snake1
     global snake2
     global apple1
+    global apple2
+    global apple3
     img = pygame.image.load('Images/Menu.png')
 
     snake1.resetPosition(
@@ -166,6 +172,8 @@ def gameLoop():
         snake2.update()
         snake2.draw()
         apple1.draw()
+        apple2.draw()
+        apple3.draw()
 
         if snake1.isOutOfBounds(dis_width, dis_height) or snake2.isOutOfBounds(dis_width, dis_height):
             game_screen = 'GameOver'
@@ -178,8 +186,28 @@ def gameLoop():
                 dis_width), get_random_position(dis_height))
             snake1.increaseLength()
 
+        if (snake1.isOver(apple2.x, apple2.y)):
+            apple2.changePosition(get_random_position(
+                dis_width), get_random_position(dis_height))
+            snake1.increaseLength()
+
+        if (snake1.isOver(apple3.x, apple3.y)):
+            apple3.changePosition(get_random_position(
+                dis_width), get_random_position(dis_height))
+            snake1.increaseLength()
+
         if (snake2.isOver(apple1.x, apple1.y)):
             apple1.changePosition(get_random_position(
+                dis_width), get_random_position(dis_height))
+            snake2.increaseLength()
+
+        if (snake2.isOver(apple2.x, apple2.y)):
+            apple2.changePosition(get_random_position(
+                dis_width), get_random_position(dis_height))
+            snake2.increaseLength()
+
+        if (snake2.isOver(apple3.x, apple3.y)):
+            apple3.changePosition(get_random_position(
                 dis_width), get_random_position(dis_height))
             snake2.increaseLength()
 
