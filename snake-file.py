@@ -38,6 +38,7 @@ mixer.music.load(
 mixer.music.play(-1)
 
 
+
 def Your_score(score):
     value = score_font.render("Player 1: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
