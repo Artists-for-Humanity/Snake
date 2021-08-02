@@ -41,6 +41,7 @@ mixer.music.play(-1)
 snake1 = Snake(pygame, dis, snake_block)
 snake2 = Snake(pygame, dis, snake_block)
 
+
 def Your_score(score):
     value = score_font.render("Player 1: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
@@ -63,7 +64,7 @@ def Your_highscore_2(score):
 
 def get_random_position(size):
     return round(random.randrange(0, size - snake_block) / 10.0) * 10.0
-    
+
 
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
@@ -89,9 +90,10 @@ def gameLoop():
     img = pygame.image.load('Images/Menu.png')
 
     snake1.resetPosition(
-            get_random_position(dis_width), get_random_position(dis_height)
-        )
-    snake2.resetPosition(get_random_position(dis_width), get_random_position(dis_height))
+        get_random_position(dis_width), get_random_position(dis_height)
+    )
+    snake2.resetPosition(get_random_position(dis_width),
+                         get_random_position(dis_height))
 
     game_over = False
 
