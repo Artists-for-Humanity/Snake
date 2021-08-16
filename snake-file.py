@@ -3,6 +3,7 @@ from pygame import mixer
 import random
 from classes.snake import Snake
 from classes.apple import Apple
+from classes.coin import Coin
 
 high_score = 0
 high_score2 = 0
@@ -99,6 +100,15 @@ def gameLoop():
     global apple3
     img = pygame.image.load('Images/Menu.png')
 
+    # Loading the sprite
+    coin_sprite1 = pygame.sprite.Group()
+    coin1 = Coin(150, 150)
+    coin_sprite1.add(coin1)
+
+    # coin_sprite2 = pygame.sprite.Group()
+    # coin2 = Coin(200, 200)
+    # coin_sprite2.add(coin2)
+
     snake1.resetPosition(
         get_random_position(dis_width), get_random_position(dis_height)
     )
@@ -175,6 +185,11 @@ def gameLoop():
         apple1.draw()
         apple2.draw()
         apple3.draw()
+
+        coin_sprite1.draw(dis)
+        time_pos = round(pygame.time.get_ticks() / 1000)
+        # instead of time_pos, use the x and y of the food position
+        coin_sprite1.update(time_pos, time_pos)
 
         if snake1.isOutOfBounds(dis_width, dis_height) or snake2.isOutOfBounds(dis_width, dis_height):
             game_screen = 'GameOver'
