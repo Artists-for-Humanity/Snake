@@ -26,12 +26,13 @@ class Coin(pygame.sprite.Sprite):
 
         self.image = self.sprites[0]
         self.rect = self.image.get_rect()
-        self.rect.topleft = (pos_x, pos_y)
 
     def update(self, pos_x, pos_y):
         current_time = round(pygame.time.get_ticks() / 60)
         spriteIndex = current_time % len(self.sprites)
         self.image = self.sprites[spriteIndex]
+        print(self.rect.width)
 
         # can this be done somewhere else?
-        self.rect.topleft = (pos_x, pos_y)
+        self.rect.topleft = (pos_x - 11,
+                             pos_y - 11)
