@@ -1,4 +1,4 @@
-from menu import Game
+from game import Game
 
 g = Game()
 

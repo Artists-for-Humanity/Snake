@@ -1,51 +1,19 @@
 import pygame
-from pygame.constants import K_DOWN, K_UP
 
 
-class Game():
-    def __init__(self):
-        pygame.init()
-        self.running, self.playing = True, False
-        self.Up_KEY, self.Down_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        self.DISPLAY_W, self.DISPLAY_H = 480, 270
-        self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
-        self.window = pygame.display.set_mode(
-            ((self.DISPLAY_W, self.DISPLAY_H)))
-        self.font_name = 'Monster Friend Fore'
-        self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
+class Menu():
+    def _init_(self, game):
+        self.game = game
+        self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H
+        self.run_display = True
+        self.cursor_rect = pygame.Rect(0, 0, 20, 20)
+        self.offset = -100
 
-    def game_loop(self):
-        while self.playing:
-            self.check_events()
-            if self.START_KEY:
-                self.playing = False
-            self.display.fill(self.BLACK)
-            self.draw_text('thanks for playing', 20,
-                           self.DISPLAY_W/2, self.DISPLAY_H/2)
-            self.window.blit(self.display, (0, 0))
-            pygame.display.update()
-            self.reset_keys()
+    def draw_cursor(self):
+        self.game.draw_text(
+            '*', 15, self.cursor_rect.x, self.cursor_rect.y)
 
-    def check_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running, self.playing = False, False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    self.START_KEY = True
-                if event.key == pygame.K_BACKSPACE:
-                    self.BACK_KEY = True
-                if event.key == pygame.K_DOWN:
-                    self.Down_KEY = True
-                if event.key == K_UP:
-                    self.Up_KEY = True
-
-    def reset_keys(self):
-        self.Up_KEY, self.Down_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-
-    def draw_text(self, text, size, x, y):
-        font = pygame.font.SysFont(self.font_name, size)
-        text_surface = font.render(text, True, self.WHITE)
-        text_rect = text_surface.get_rect()
-        text_rect.center = (x, y)
-        self.display.blit(text_surface, text_rect)
+    def blit_screen(self):
+        self.game.window.blit(self.game.display, (0, 0))
+        pygame.display.update()
+        self.game.reset_keys()
