@@ -33,24 +33,13 @@ score_font = pygame.font.SysFont("comicsansms", 35)
 game_screen = 'Game'  # 'Game' 'GameOver' 'Menu'
 
 def Your_score(score):
-    value = score_font.render("Player 1: " + str(score), True, yellow)
+    value = score_font.render("Your score: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
 
 
 def Your_highscore(score):
-    value = score_font.render("Player 1: " + str(score), True, red)
+    value = score_font.render("Highscore: " + str(score), True, red)
     dis.blit(value, [0, 50])
-
-
-def Your_score_2(score):
-    value = score_font.render("Player 2: " + str(score), True, yellow)
-    dis.blit(value, [885, 0])
-
-
-def Your_highscore_2(score):
-    value = score_font.render("Player 2: " + str(score), True, red)
-    dis.blit(value, [885, 50])
-
 
 def get_random_position(size):
     return round(random.randrange(0, size - snake_block) / snake_block) * snake_block
@@ -60,19 +49,11 @@ def message(msg, color):
     mesg = font_style.render(msg, True, color)
     dis.blit(mesg, [dis_width / 6, dis_height / 3])
 
-
 def set_score(high_score, score):
     Your_score(score)
     Your_highscore(high_score)
 
-
-def set_score2(high_score, score):
-    Your_score_2(score)
-    Your_highscore_2(high_score)
-
-
 snake1 = Snake(pygame, dis, snake_block)
-snake2 = Snake(pygame, dis, snake_block)
 apple1 = Apple(pygame, dis, snake_block, black, get_random_position(
     dis_width), get_random_position(dis_height))
 apple2 = Apple(pygame, dis, snake_block, black, get_random_position(
@@ -86,7 +67,6 @@ def gameLoop():
     global high_score2
     global game_screen
     global snake1
-    global snake2
     global apple1
     global apple2
     global apple3
@@ -108,8 +88,6 @@ def gameLoop():
     snake1.resetPosition(
         get_random_position(dis_width), get_random_position(dis_height)
     )
-    snake2.resetPosition(get_random_position(dis_width),
-                         get_random_position(dis_height))
 
     game_over = False
 
@@ -161,32 +139,15 @@ def gameLoop():
                     snake1.moveUp()
                 elif event.key == pygame.K_DOWN:
                     snake1.moveDown()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
-                    snake2.moveLeft()
-                elif event.key == pygame.K_d:
-                    snake2.moveRight()
-                elif event.key == pygame.K_w:
-                    snake2.moveUp()
-                elif event.key == pygame.K_s:
-                    snake2.moveDown()
 
         dis.fill(black)
         set_score(high_score, snake1.Length - 1)
 
         snake1.update()
         snake1.draw()
-        snake2.update()
-        snake2.draw()
         apple1.draw()
         apple2.draw()
         apple3.draw()
-
-        if snake1.isOutOfBounds(dis_width, dis_height) or snake2.isOutOfBounds(dis_width, dis_height):
-            game_screen = 'GameOver'
-
-        if snake1.isOverlappingItself() or snake2.isOverlappingItself():
-            game_screen = 'GameOver'
 
         coin_sprite1.draw(dis)
         coin_sprite1.update(apple1.x, apple1.y)
@@ -194,6 +155,12 @@ def gameLoop():
         coin_sprite2.update(apple2.x, apple2.y)
         coin_sprite3.draw(dis)
         coin_sprite3.update(apple3.x, apple3.y)
+
+        if snake1.isOutOfBounds(dis_width, dis_height):
+            game_screen = 'GameOver'
+
+        if snake1.isOverlappingItself():
+            game_screen = 'GameOver'
 
         if (snake1.isOver(apple1.x, apple1.y)):
             apple1.changePosition(get_random_position(
@@ -210,22 +177,7 @@ def gameLoop():
                 dis_width), get_random_position(dis_height))
             snake1.increaseLength()
 
-        if (snake2.isOver(apple1.x, apple1.y)):
-            apple1.changePosition(get_random_position(
-                dis_width), get_random_position(dis_height))
-            snake2.increaseLength()
-
-        if (snake2.isOver(apple2.x, apple2.y)):
-            apple2.changePosition(get_random_position(
-                dis_width), get_random_position(dis_height))
-            snake2.increaseLength()
-
-        if (snake2.isOver(apple3.x, apple3.y)):
-            apple3.changePosition(get_random_position(
-                dis_width), get_random_position(dis_height))
-            snake2.increaseLength()
-
-        clock.tick(15)
+        clock.tick(snake_speed)
         pygame.display.update()
 
     pygame.quit()
