@@ -73,11 +73,11 @@ def set_score2(high_score, score):
 
 snake1 = Snake(pygame, dis, snake_block)
 snake2 = Snake(pygame, dis, snake_block)
-apple1 = Apple(pygame, dis, snake_block, red, get_random_position(
+apple1 = Apple(pygame, dis, snake_block, black, get_random_position(
     dis_width), get_random_position(dis_height))
-apple2 = Apple(pygame, dis, snake_block, red, get_random_position(
+apple2 = Apple(pygame, dis, snake_block, black, get_random_position(
     dis_width), get_random_position(dis_height))
-apple3 = Apple(pygame, dis, snake_block, red, get_random_position(
+apple3 = Apple(pygame, dis, snake_block, black, get_random_position(
     dis_width), get_random_position(dis_height))
 
 
@@ -188,19 +188,12 @@ def gameLoop():
         if snake1.isOverlappingItself() or snake2.isOverlappingItself():
             game_screen = 'GameOver'
 
-        food_pos_x = apple1.x
-        food_pos_y = apple1.y
-        food_pos_x_2 = apple2.x
-        food_pos_y_2 = apple2.y
-        food_pos_x_3 = apple3.x
-        food_pos_y_3 = apple3.y
-
         coin_sprite1.draw(dis)
-        coin_sprite1.update(food_pos_x, food_pos_y)
+        coin_sprite1.update(apple1.x, apple1.y)
         coin_sprite2.draw(dis)
-        coin_sprite2.update(food_pos_x_2, food_pos_y_2)
+        coin_sprite2.update(apple2.x, apple2.y)
         coin_sprite3.draw(dis)
-        coin_sprite3.update(food_pos_x_3, food_pos_y_3)
+        coin_sprite3.update(apple3.x, apple3.y)
 
         if (snake1.isOver(apple1.x, apple1.y)):
             apple1.changePosition(get_random_position(
