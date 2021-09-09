@@ -1,5 +1,4 @@
 import pygame
-from pygame import mixer
 import random
 from classes.snake import Snake
 from classes.apple import Apple
@@ -32,12 +31,6 @@ font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
 
 game_screen = 'Menu'  # 'Game' 'GameOver' 'Menu'
-
-# Background Music
-mixer.music.load(
-    'Gothic Storm Music- Red Harvest (2020 Epic Menacing Sinister Gothic Orchestral).wav')
-mixer.music.play(-1)
-
 
 def Your_score(score):
     value = score_font.render("Player 1: " + str(score), True, yellow)
