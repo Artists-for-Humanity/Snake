@@ -1,5 +1,4 @@
 import pygame
-import sys
 from pathlib import Path
 
 base_path = Path(__file__).parent
@@ -31,8 +30,8 @@ class Coin(pygame.sprite.Sprite):
         current_time = round(pygame.time.get_ticks() / 60)
         spriteIndex = current_time % len(self.sprites)
         self.image = self.sprites[spriteIndex]
-        print(self.rect.width)
 
+        offset = 0
         # can this be done somewhere else?
-        self.rect.topleft = (pos_x - 11,
-                             pos_y - 11)
+        self.rect.topleft = (pos_x - offset,
+                             pos_y - offset)

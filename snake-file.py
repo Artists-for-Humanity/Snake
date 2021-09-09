@@ -24,13 +24,13 @@ pygame.display.set_caption('Snake Game by Edureka')
 
 clock = pygame.time.Clock()
 
-snake_block = 10
+snake_block = 20
 snake_speed = 15
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
 
-game_screen = 'Menu'  # 'Game' 'GameOver' 'Menu'
+game_screen = 'Game'  # 'Game' 'GameOver' 'Menu'
 
 def Your_score(score):
     value = score_font.render("Player 1: " + str(score), True, yellow)
@@ -53,7 +53,7 @@ def Your_highscore_2(score):
 
 
 def get_random_position(size):
-    return round(random.randrange(0, size - snake_block) / 10.0) * 10.0
+    return round(random.randrange(0, size - snake_block) / snake_block) * snake_block
 
 
 def message(msg, color):
@@ -73,11 +73,11 @@ def set_score2(high_score, score):
 
 snake1 = Snake(pygame, dis, snake_block)
 snake2 = Snake(pygame, dis, snake_block)
-apple1 = Apple(pygame, dis, snake_block, black, get_random_position(
+apple1 = Apple(pygame, dis, snake_block, red, get_random_position(
     dis_width), get_random_position(dis_height))
-apple2 = Apple(pygame, dis, snake_block, black, get_random_position(
+apple2 = Apple(pygame, dis, snake_block, red, get_random_position(
     dis_width), get_random_position(dis_height))
-apple3 = Apple(pygame, dis, snake_block, black, get_random_position(
+apple3 = Apple(pygame, dis, snake_block, red, get_random_position(
     dis_width), get_random_position(dis_height))
 
 
@@ -94,15 +94,15 @@ def gameLoop():
 
     # Loading the sprite
     coin_sprite1 = pygame.sprite.Group()
-    coin1 = Coin(150, 150)
+    coin1 = Coin(0, 0)
     coin_sprite1.add(coin1)
 
     coin_sprite2 = pygame.sprite.Group()
-    coin2 = Coin(150, 150)
+    coin2 = Coin(0, 0)
     coin_sprite2.add(coin2)
 
     coin_sprite3 = pygame.sprite.Group()
-    coin3 = Coin(150, 150)
+    coin3 = Coin(0, 0)
     coin_sprite3.add(coin3)
 
     snake1.resetPosition(
