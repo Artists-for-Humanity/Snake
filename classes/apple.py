@@ -8,8 +8,16 @@ class Apple():
         self.color = color
 
     def draw(self):
-        self.pygame.draw.rect(self.dis, self.color, [
-            self.x, self.y,  self.blockSize, self.blockSize])
+        self.pygame.draw.rect(
+            self.dis,
+            self.color,
+            [
+                self.x,
+                self.y,
+                self.blockSize,
+                self.blockSize
+            ]
+        )
 
     def changePosition(self, x, y):
         self.x = x

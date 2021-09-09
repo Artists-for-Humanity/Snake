@@ -1,25 +1,25 @@
 import pygame
 
-green = (0, 255, 0)
-
-
 class Snake():
-    def __init__(self, pygame, dis, blockSize):
+    def __init__(self, pygame, dis, blockSize, color):
         self.pygame = pygame
         self.dis = dis
         self.blockSize = blockSize
         self.resetPosition(0, 0)
+        self.color = color
 
     def draw(self):
         for x in self.List:
             self.pygame.draw.rect(
-                self.dis, green, [x[0], x[1], self.blockSize, self.blockSize])
+                self.dis,
+                self.color,
+                [x[0], x[1], self.blockSize, self.blockSize]
+            )
 
     def resetPosition(self, x, y):
         self.Length = 1
         self.Head = []
         self.List = []
-        self.Speed = 15
         self.LastPos = [x, y]
         self.Change = [0, 0]
 
@@ -60,5 +60,5 @@ class Snake():
                 return True
         return False
 
-    def isOutOfBounds(self, width, height):
-        return self.LastPos[0] >= width or self.LastPos[0] < 0 or self.LastPos[1] >= height or self.LastPos[1] < 0
+    def isOutOfBounds(self, bounds):
+        return self.LastPos[0] >= bounds[1] or self.LastPos[0] < bounds[3] or self.LastPos[1] >= bounds[2] or self.LastPos[1] < bounds[0]
