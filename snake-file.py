@@ -27,6 +27,7 @@ score_bar_height = 40
 inset = 20
 bounds = [40, dis_width - inset, dis_height - inset, inset] # top, right, bottom, left
 dis = pygame.display.set_mode((dis_width, dis_height), pygame.FULLSCREEN)
+pygame.mouse.set_visible(False)
 
 #
 # Font
