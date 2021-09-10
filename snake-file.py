@@ -10,9 +10,9 @@ clock = pygame.time.Clock()
 
 #
 # Colors
-black = '#222222'
+black = (34, 34, 34)
 red = (213, 50, 80)
-green = '#97c405'
+green = (151, 196, 5)
 background_color = black
 
 #
