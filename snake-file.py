@@ -19,12 +19,14 @@ background_color = black
 
 #
 # Display variables
-dis_width = 1080
-dis_height = 900
+display = pygame.display.Info()
+dis_width = display.current_w #1080
+dis_height = display.current_h #900
+print(f"Width: {dis_width}, Height: {dis_height}")
 score_bar_height = 40
 inset = 20
 bounds = [40, dis_width - inset, dis_height - inset, inset] # top, right, bottom, left
-dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
+dis = pygame.display.set_mode((dis_width, dis_height), pygame.FULLSCREEN)
 
 #
 # Font
