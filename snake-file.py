@@ -74,6 +74,7 @@ def set_score(high_score, score):
     draw_highscore(high_score)
 
 def draw_global():
+    print(f"color: {background_color}, type: {type(background_color)}")
     dis.fill(background_color)
 
     border = 4
