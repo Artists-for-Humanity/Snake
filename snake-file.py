@@ -93,7 +93,8 @@ def draw_global():
             right - left,
             bottom - top
         ],
-    border, 1)
+        border
+    )
 
 
 # Global Variables
