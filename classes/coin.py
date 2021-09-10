@@ -19,8 +19,9 @@ class Coin(pygame.sprite.Sprite):
         super().__init__()
         self.sprites = []
         for image in coin_images:
-            print(f"Image Path: {(base_path / image).resolve()}")
-            self.sprites.append(str(pygame.image.load((base_path / image).resolve())))
+            path = (base_path / image).resolve()
+            print(f"Image Path: {path}")
+            self.sprites.append(path)
 
         self.image = self.sprites[0]
         self.rect = self.image.get_rect()
