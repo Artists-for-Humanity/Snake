@@ -1,11 +1,13 @@
 import pygame
 import random
+from pathlib import Path
 from classes.snake import Snake
 from classes.apple import Apple
 from classes.coin import Coin
 
-pygame.init()
+base_path = Path(__file__).parent
 
+pygame.init()
 clock = pygame.time.Clock()
 
 #
@@ -26,7 +28,7 @@ dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
 
 #
 # Font
-font_style = pygame.font.SysFont("OCR A Std", 25)
+font_style = pygame.font.Font(str((base_path / 'fonts/OCRAStd.ttf').resolve()), 25)
 
 #
 # Game variables
@@ -74,7 +76,6 @@ def set_score(high_score, score):
     draw_highscore(high_score)
 
 def draw_global():
-    print(f"color: {background_color}, type: {type(background_color)}")
     dis.fill(background_color)
 
     border = 4
