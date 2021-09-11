@@ -1,32 +1,60 @@
 import pygame
 import random
+from pathlib import Path
 from classes.snake import Snake
 from classes.apple import Apple
 from classes.coin import Coin
 
-pygame.init()
+base_path = Path(__file__).parent
 
-black = '#222222'
+pygame.init()
+clock = pygame.time.Clock()
+
+#
+# Colors
+black = (34, 34, 34)
 red = (213, 50, 80)
-green = '#97c405'
+green = (151, 196, 5)
 background_color = black
 
-dis_width = 1080
-dis_height = 900
+#
+# Display variables
+display = pygame.display.Info()
+dis_width = display.current_w #1080
+dis_height = display.current_h #900
+print(f"Width: {dis_width}, Height: {dis_height}")
 score_bar_height = 40
 inset = 20
 bounds = [40, dis_width - inset, dis_height - inset, inset] # top, right, bottom, left
+dis = pygame.display.set_mode((dis_width, dis_height), pygame.FULLSCREEN)
+pygame.mouse.set_visible(False)
 
-font_style = pygame.font.SysFont("OCR A Std", 25)
-dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
+#
+# Font
+font_style = pygame.font.Font(str((base_path / 'fonts/OCRAStd.ttf').resolve()), 25)
 
-clock = pygame.time.Clock()
-
+#
+# Game variables
 high_score = 0
 snake_block = 20
 snake_speed = 15
 game_screen = 'Game'  # 'Game' 'GameOver' 'Menu'
 
+#
+# Game pad
+gamepad = False
+print(f"Joystics Count: {pygame.joystick.get_count()}")
+if (pygame.joystick.get_count() != 0):
+    gamepad = pygame.joystick.Joystick(0)
+    print(gamepad.get_name())
+    gamepad.init()
+    GAME_PAD_Y_AXIS = 2
+    GAME_PAD_X_AXIS = 0
+else:
+    print("No gamepad detected")
+
+#
+# Global Functions
 def draw_score(score):
     value = font_style.render(f"Your score: {str(score)}".upper(), True, green)
     dis.blit(value, [bounds[3], 8])
@@ -41,9 +69,10 @@ def get_random_position_x():
 def get_random_position_y():
     return round(random.randrange(bounds[0], bounds[2] - snake_block) / snake_block) * snake_block
 
-def message(msg, color):
-    mesg = font_style.render(msg, True, color)
-    dis.blit(mesg, [dis_width / 6, dis_height / 3])
+def message(msg):
+    mesg = font_style.render(msg.upper(), True, green)
+    mesg_rect = mesg.get_rect(center=(dis_width/2, dis_height/2))
+    dis.blit(mesg, mesg_rect)
 
 def set_score(high_score, score):
     draw_score(score)
@@ -68,13 +97,18 @@ def draw_global():
             right - left,
             bottom - top
         ],
-    border, 1)
+        border
+    )
 
+
+# Global Variables
 snake1 = Snake(pygame, dis, snake_block, green)
 apple1 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
 apple2 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
 apple3 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
 
+#
+# Game Loop
 def gameLoop():
     global high_score
     global game_screen
@@ -86,15 +120,15 @@ def gameLoop():
 
     # Loading the sprite
     coin_sprite1 = pygame.sprite.Group()
-    coin1 = Coin(0, 0)
+    coin1 = Coin()
     coin_sprite1.add(coin1)
 
     coin_sprite2 = pygame.sprite.Group()
-    coin2 = Coin(0, 0)
+    coin2 = Coin()
     coin_sprite2.add(coin2)
 
     coin_sprite3 = pygame.sprite.Group()
-    coin3 = Coin(0, 0)
+    coin3 = Coin()
     coin_sprite3.add(coin3)
 
     snake1.resetPosition(
@@ -131,7 +165,7 @@ def gameLoop():
 
         while game_screen == 'GameOver':
             draw_global()
-            message("You Lost! Press C-Play Again or Q-Quit", red)
+            message("You Lost! Press C-Play Again or Q-Quit")
             set_score(high_score, snake1.Length - 1)
             pygame.display.update()
 
@@ -145,8 +179,25 @@ def gameLoop():
                         gameLoop()
 
         for event in pygame.event.get():
+            # print(event)
             if event.type == pygame.QUIT:
                 game_over = True
+            if event.type == pygame.JOYAXISMOTION:
+                axis = event.axis
+                value = round(event.value)
+                # print(f"Axis: {str(axis)}, Value: {str(value)}")
+
+                if (axis == GAME_PAD_X_AXIS):
+                    if (value == 1):
+                        snake1.moveRight()
+                    if (value == -1):
+                        snake1.moveLeft()
+                if (axis == GAME_PAD_Y_AXIS):
+                    if (value == 1):
+                        snake1.moveDown()
+                    if (value == -1):
+                        snake1.moveUp()
+                
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     snake1.moveLeft()

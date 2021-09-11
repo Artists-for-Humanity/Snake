@@ -14,14 +14,13 @@ coin_images = [
     '../Images/coin6.png',
 ]
 
-
 class Coin(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
+    def __init__(self):
         super().__init__()
         self.sprites = []
         for image in coin_images:
-            self.sprites.append(pygame.image.load(
-                (base_path / image).resolve()))
+            path = str((base_path / image).resolve())
+            self.sprites.append(pygame.image.load(path))
 
         self.image = self.sprites[0]
         self.rect = self.image.get_rect()
