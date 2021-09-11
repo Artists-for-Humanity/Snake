@@ -19,14 +19,20 @@ background_color = black
 
 #
 # Display variables
-display = pygame.display.Info()
-dis_width = display.current_w #1080
-dis_height = display.current_h #900
-print(f"Width: {dis_width}, Height: {dis_height}")
 score_bar_height = 40
 inset = 20
+display = pygame.display.Info()
+fullscreen = False
+if fullscreen:
+    dis_width = display.current_w #1080
+    dis_height = display.current_h #900
+    dis = pygame.display.set_mode((dis_width, dis_height), pygame.FULLSCREEN)
+else:
+    dis_width = 1080
+    dis_height = 900
+    dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
 bounds = [40, dis_width - inset, dis_height - inset, inset] # top, right, bottom, left
-dis = pygame.display.set_mode((dis_width, dis_height), pygame.FULLSCREEN)
+print(f"Width: {dis_width}, Height: {dis_height}")
 pygame.mouse.set_visible(False)
 
 #
@@ -191,12 +197,12 @@ def gameLoop():
                     if (value == 1):
                         snake1.moveRight()
                     if (value == -1):
-                        snake1.moveLeft()
+                        snake1.moveUp()
                 if (axis == GAME_PAD_Y_AXIS):
                     if (value == 1):
-                        snake1.moveDown()
+                        snake1.moveLeft()
                     if (value == -1):
-                        snake1.moveUp()
+                        snake1.moveDown()
                 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
