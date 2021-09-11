@@ -1,6 +1,7 @@
 import pygame
 import random
 from pathlib import Path
+import sqlite3
 
 from pygame import draw
 from classes.snake import Snake
@@ -11,6 +12,20 @@ base_path = Path(__file__).parent
 
 pygame.init()
 clock = pygame.time.Clock()
+
+#
+# Database
+db = sqlite3.connect('highscore.db')
+
+cursor = db.cursor()
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS highscore(
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        score INTEGER
+    )
+''')
+db.commit()
 
 #
 # Colors
@@ -56,6 +71,8 @@ high_score = 0
 snake_block = 20
 snake_speed = 15
 game_screen = 'Menu'  # 'Game' 'GameOver' 'Menu'
+prev_game_screen = ''
+score_saved = False
 
 #
 # Game pad
@@ -86,15 +103,9 @@ def get_random_position_x():
 def get_random_position_y():
     return round(random.randrange(bounds[0], bounds[2] - snake_block) / snake_block) * snake_block
 
-def message(msg):
-    mesg = font_style.render(msg.upper(), True, green)
-    mesg_rect = mesg.get_rect(center=(dis_width/2, dis_height/2))
-    dis.blit(mesg, mesg_rect)
-
-def set_score(high_score, score):
+def draw_scores(high_score, score):
     draw_score(score)
     draw_highscore(high_score)
-
 
 def draw_background():
     dis.fill(background_color)
@@ -121,9 +132,17 @@ def draw_global():
         border
     )
 
+def update_prev_screen():
+    global prev_game_screen
+    global game_screen
+    if (prev_game_screen is not game_screen):
+        prev_game_screen = game_screen
+        return True
+    return False
+
 
 # Global Variables
-snake1 = Snake(pygame, dis, snake_block, green)
+snake = Snake(pygame, dis, snake_block, green)
 apple1 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
 apple2 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
 apple3 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
@@ -133,7 +152,8 @@ apple3 = Apple(pygame, dis, snake_block, background_color, get_random_position_x
 def gameLoop():
     global high_score
     global game_screen
-    global snake1
+    global prev_game_screen
+    global snake
     global apple1
     global apple2
     global apple3
@@ -151,21 +171,23 @@ def gameLoop():
     coin3 = Coin()
     coin_sprite3.add(coin3)
 
-    snake1.resetPosition(
+    snake.resetPosition(
         get_random_position_x(),
         get_random_position_y()
     )
 
-    game_over = False
+    exit = False
 
-    while not game_over:
-        if snake1.Length - 1 > high_score:
-            high_score = snake1.Length - 1
+    while not exit:
+        if snake.Length - 1 > high_score:
+            high_score = snake.Length - 1
             pygame.display.update()
 
         #
         # Menu
         while game_screen == 'Menu':
+            if game_screen is not prev_game_screen:
+                print("MENU SCREEN")
             draw_background()
             title = menu_font_style_big.render("Snake", True, white)
             dis.blit(title, title.get_rect(center=(dis_width/2, dis_height/2)))
@@ -187,101 +209,121 @@ def gameLoop():
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
-                        game_over = True
+                        exit = True
                         game_screen = 'Game'
                     if event.key == pygame.K_c:
                         game_screen = 'Game'
                         gameLoop()
-
+            if update_prev_screen():
+                print("SET PREV SCREEN: MENU")
             pygame.display.update()
 
         #
         # Gameover
         while game_screen == 'GameOver':
+            if game_screen is not prev_game_screen:
+                print("GAMEOVER SCREEN")
+                cursor = db.cursor()
+                cursor.execute('''INSERT INTO highscore(name, score)
+                                VALUES(?,?)''', ("AAA", snake.Length - 1))
+                db.commit()
+
             draw_global()
-            message("You Lost! Press C-Play Again or Q-Quit")
-            set_score(high_score, snake1.Length - 1)
-            pygame.display.update()
+            mesg = menu_font_style_big.render("Game over!", True, white)
+            dis.blit(mesg, mesg.get_rect(center=(dis_width/2, dis_height/2)))
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
-                        game_over = True
+                        exit = True
                         game_screen = 'Game'
                     if event.key == pygame.K_c:
                         game_screen = 'Game'
                         gameLoop()
 
-        for event in pygame.event.get():
-            # print(event)
-            if event.type == pygame.QUIT:
-                game_over = True
-            if event.type == pygame.JOYAXISMOTION:
-                axis = event.axis
-                value = round(event.value)
-                # print(f"Axis: {str(axis)}, Value: {str(value)}")
-
-                if (axis == GAME_PAD_X_AXIS):
-                    if (value == 1):
-                        snake1.moveRight()
-                    if (value == -1):
-                        snake1.moveUp()
-                if (axis == GAME_PAD_Y_AXIS):
-                    if (value == 1):
-                        snake1.moveLeft()
-                    if (value == -1):
-                        snake1.moveDown()
-                
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    snake1.moveLeft()
-                elif event.key == pygame.K_RIGHT:
-                    snake1.moveRight()
-                elif event.key == pygame.K_UP:
-                    snake1.moveUp()
-                elif event.key == pygame.K_DOWN:
-                    snake1.moveDown()
-
-        draw_global()
-        set_score(high_score, snake1.Length - 1)
-
-        snake1.update()
-        snake1.draw()
-        apple1.draw()
-        apple2.draw()
-        apple3.draw()
-
-        coin_sprite1.draw(dis)
-        coin_sprite1.update(apple1.x, apple1.y)
-        coin_sprite2.draw(dis)
-        coin_sprite2.update(apple2.x, apple2.y)
-        coin_sprite3.draw(dis)
-        coin_sprite3.update(apple3.x, apple3.y)
-
-        if snake1.isOutOfBounds(bounds) or snake1.isOverlappingItself():
-            game_screen = 'GameOver'
+            if update_prev_screen():
+                print("SET PREV SCREEN: GAMEOVER")
             pygame.display.update()
 
-        if (snake1.isOver(apple1.x, apple1.y)):
-            apple1.changePosition(
-                get_random_position_x(),
-                get_random_position_y()
-            )
-            snake1.increaseLength()
+        if game_screen is not prev_game_screen:
+            print("GAME SCREEN")
+        #
+        # Game
+        if game_screen == 'Game':
+            for event in pygame.event.get():
+                # print(event)
+                if event.type == pygame.QUIT:
+                    exit = True
+                if event.type == pygame.JOYAXISMOTION:
+                    axis = event.axis
+                    value = round(event.value)
+                    # print(f"Axis: {str(axis)}, Value: {str(value)}")
 
-        if (snake1.isOver(apple2.x, apple2.y)):
-            apple2.changePosition(
-                get_random_position_x(),
-                get_random_position_y()
-            )
-            snake1.increaseLength()
+                    if (axis == GAME_PAD_X_AXIS):
+                        if (value == 1):
+                            snake.moveRight()
+                        if (value == -1):
+                            snake.moveUp()
+                    if (axis == GAME_PAD_Y_AXIS):
+                        if (value == 1):
+                            snake.moveLeft()
+                        if (value == -1):
+                            snake.moveDown()
+                    
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        snake.moveLeft()
+                    elif event.key == pygame.K_RIGHT:
+                        snake.moveRight()
+                    elif event.key == pygame.K_UP:
+                        snake.moveUp()
+                    elif event.key == pygame.K_DOWN:
+                        snake.moveDown()
 
-        if (snake1.isOver(apple3.x, apple3.y)):
-            apple3.changePosition(
-                get_random_position_x(),
-                get_random_position_y()
-            )
-            snake1.increaseLength()
+            draw_global()
+            draw_scores(high_score, snake.Length - 1)
+            score_saved = False
+
+            snake.update()
+            snake.draw()
+            apple1.draw()
+            apple2.draw()
+            apple3.draw()
+
+            coin_sprite1.draw(dis)
+            coin_sprite1.update(apple1.x, apple1.y)
+            coin_sprite2.draw(dis)
+            coin_sprite2.update(apple2.x, apple2.y)
+            coin_sprite3.draw(dis)
+            coin_sprite3.update(apple3.x, apple3.y)
+
+            if snake.isOutOfBounds(bounds) or snake.isOverlappingItself():
+                game_screen = 'GameOver'
+                gameLoop()
+
+            if (snake.isOver(apple1.x, apple1.y)):
+                apple1.changePosition(
+                    get_random_position_x(),
+                    get_random_position_y()
+                )
+                snake.increaseLength()
+
+            if (snake.isOver(apple2.x, apple2.y)):
+                apple2.changePosition(
+                    get_random_position_x(),
+                    get_random_position_y()
+                )
+                snake.increaseLength()
+
+            if (snake.isOver(apple3.x, apple3.y)):
+                apple3.changePosition(
+                    get_random_position_x(),
+                    get_random_position_y()
+                )
+                snake.increaseLength()
+
+            if update_prev_screen():
+                print("SET PREV SCREEN: GAME")
 
         clock.tick(snake_speed)
         pygame.display.update()
