@@ -1,6 +1,8 @@
 import pygame
 import random
 from pathlib import Path
+
+from pygame import draw
 from classes.snake import Snake
 from classes.apple import Apple
 from classes.coin import Coin
@@ -13,6 +15,8 @@ clock = pygame.time.Clock()
 #
 # Colors
 black = (34, 34, 34)
+gray = (90, 90, 90)
+white = (255, 255, 255)
 red = (213, 50, 80)
 green = (151, 196, 5)
 background_color = black
@@ -28,8 +32,8 @@ if fullscreen:
     dis_height = display.current_h #900
     dis = pygame.display.set_mode((dis_width, dis_height), pygame.FULLSCREEN)
 else:
-    dis_width = 1080
-    dis_height = 900
+    dis_width = 1200
+    dis_height = 1200
     dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
 bounds = [40, dis_width - inset, dis_height - inset, inset] # top, right, bottom, left
 print(f"Width: {dis_width}, Height: {dis_height}")
@@ -38,13 +42,20 @@ pygame.mouse.set_visible(False)
 #
 # Font
 font_style = pygame.font.Font(str((base_path / 'fonts/OCRAStd.ttf').resolve()), 25)
+menu_font_style_big = pygame.font.Font(str((base_path / 'fonts/MonsterFriendFore.ttf').resolve()), 100)
+menu_font_style_text = pygame.font.Font(str((base_path / 'fonts/MonsterFriendFore.ttf').resolve()), 25)
+
+#
+# Menu
+snake_img = pygame.image.load('Images/Snake.png')
+play_text_image = pygame.image.load('Images/Play-Text.png')
 
 #
 # Game variables
 high_score = 0
 snake_block = 20
 snake_speed = 15
-game_screen = 'Game'  # 'Game' 'GameOver' 'Menu'
+game_screen = 'Menu'  # 'Game' 'GameOver' 'Menu'
 
 #
 # Game pad
@@ -84,8 +95,12 @@ def set_score(high_score, score):
     draw_score(score)
     draw_highscore(high_score)
 
-def draw_global():
+
+def draw_background():
     dis.fill(background_color)
+
+def draw_global():
+    draw_background()
 
     border = 4
     offset = 2
@@ -122,7 +137,6 @@ def gameLoop():
     global apple1
     global apple2
     global apple3
-    img = pygame.image.load('Images/Menu.png')
 
     # Loading the sprite
     coin_sprite1 = pygame.sprite.Group()
@@ -149,16 +163,26 @@ def gameLoop():
             high_score = snake1.Length - 1
             pygame.display.update()
 
+        #
+        # Menu
         while game_screen == 'Menu':
-            draw_global()
-            img_size = 600
-            dis.blit(img, (
-                (dis_width/2) - img_size/2,
-                (dis_height/2) - img_size/2,
-                img_size,
-                img_size
-            ))
-            pygame.display.update()
+            draw_background()
+            title = menu_font_style_big.render("Snake", True, white)
+            dis.blit(title, title.get_rect(center=(dis_width/2, dis_height/2)))
+            dis.blit(play_text_image, play_text_image.get_rect(center=(dis_width/2, dis_height/2 + 160)))
+
+            credits = [
+                menu_font_style_text.render("Created by:", True, gray),
+                menu_font_style_text.render("Creative Technology Studio", True, gray),
+                menu_font_style_text.render("Jeremiah Harris", True, gray),
+                menu_font_style_text.render("JQ", True, gray)
+            ]
+            credits.reverse()
+            for i, credit in enumerate(credits):
+                dis.blit(credit, credit.get_rect(center=(dis_width/2, dis_height - 40 - (40 * i))))
+
+            snake_img_scaled = pygame.transform.scale(snake_img, (256, 256))
+            dis.blit(snake_img_scaled, snake_img_scaled.get_rect(center=(dis_width/2 + 128, dis_height/2 - 128 - 25)))
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -169,6 +193,10 @@ def gameLoop():
                         game_screen = 'Game'
                         gameLoop()
 
+            pygame.display.update()
+
+        #
+        # Gameover
         while game_screen == 'GameOver':
             draw_global()
             message("You Lost! Press C-Play Again or Q-Quit")
