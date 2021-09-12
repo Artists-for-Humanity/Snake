@@ -2,6 +2,7 @@ import pygame
 import random
 from pathlib import Path
 import sqlite3
+import platform
 
 from pygame import draw
 from classes.snake import Snake
@@ -9,6 +10,9 @@ from classes.apple import Apple
 from classes.coin import Coin
 
 base_path = Path(__file__).parent
+my_system = platform.uname()
+
+print(my_system)
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -41,7 +45,7 @@ background_color = black
 score_bar_height = 40
 inset = 20
 display = pygame.display.Info()
-fullscreen = True
+fullscreen = False
 if fullscreen:
     dis_width = display.current_w #1080
     dis_height = display.current_h #900
