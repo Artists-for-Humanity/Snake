@@ -218,7 +218,7 @@ def gameLoop():
     if (len(high_scores) > 0):
         high_score = high_scores[0]
     else:
-        high_score = [('AAA', 0)]
+        high_score = ('AAA', 0)
 
     exit = False
 
