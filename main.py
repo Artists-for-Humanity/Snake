@@ -18,7 +18,6 @@ clock = pygame.time.Clock()
 #
 # Database
 db = sqlite3.connect('highscore.db')
-
 cursor = db.cursor()
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS highscore(
@@ -69,12 +68,11 @@ play_text_image = pygame.image.load('Images/Play-Text.png')
 
 #
 # Game variables
-high_score = 0
+high_score = ('AAA', 0)
 snake_block = 20
 snake_speed = 15
-game_screen = 'Menu'  # 'Game' 'GameOver' 'Menu'
+game_screen = 'Menu'  # 'Menu' 'Game' 'GameOver'
 prev_game_screen = ''
-score_saved = False
 
 #
 # Game pad
@@ -94,7 +92,7 @@ def draw_score(score):
     dis.blit(value, [bounds[3], 8])
 
 def draw_highscore(score):
-    value = font_style.render(f"Highscore: {str(score)}".upper(), True, green)
+    value = font_style.render(f"Highscore: {score[0]} - {str(score[1])}".upper(), True, green)
     dis.blit(value, [dis_width / 2, 8])
 
 def get_random_position_x():
@@ -147,42 +145,84 @@ apple1 = Apple(pygame, dis, snake_block, background_color, get_random_position_x
 apple2 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
 apple3 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
 
+# Loading the sprite
+coin_sprite1 = pygame.sprite.Group()
+coin1 = Coin()
+coin_sprite1.add(coin1)
+
+coin_sprite2 = pygame.sprite.Group()
+coin2 = Coin()
+coin_sprite2.add(coin2)
+
+coin_sprite3 = pygame.sprite.Group()
+coin3 = Coin()
+coin_sprite3.add(coin3)
+
+initials = []
+active_letter = 0
+letters = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+]
+
 #
 # Game Loop
 def gameLoop():
-    global high_score
+    global active_letter
+    global initials
+    global cursor
     global game_screen
     global prev_game_screen
     global snake
     global apple1
     global apple2
     global apple3
+    global coin_sprite1
+    global coin_sprite2
+    global coin_sprite3
+    global coin1
+    global coin2
+    global coin3
 
-    # Loading the sprite
-    coin_sprite1 = pygame.sprite.Group()
-    coin1 = Coin()
-    coin_sprite1.add(coin1)
+    high_scores = cursor.execute('''
+        SELECT name, score
+        FROM highscore
+        ORDER BY score DESC
+        LIMIT 3
+    ''').fetchall()
 
-    coin_sprite2 = pygame.sprite.Group()
-    coin2 = Coin()
-    coin_sprite2.add(coin2)
-
-    coin_sprite3 = pygame.sprite.Group()
-    coin3 = Coin()
-    coin_sprite3.add(coin3)
-
-    snake.resetPosition(
-        get_random_position_x(),
-        get_random_position_y()
-    )
+    if (len(high_scores) > 0):
+        high_score = high_scores[0]
+    else:
+        high_score = [('AAA', 0)]
 
     exit = False
 
     while not exit:
-        if snake.Length - 1 > high_score:
-            high_score = snake.Length - 1
-            pygame.display.update()
-
         #
         # Menu
         while game_screen == 'Menu':
@@ -190,6 +230,9 @@ def gameLoop():
             title = menu_font_style_big.render("Snake", True, white)
             dis.blit(title, title.get_rect(center=(dis_width/2, dis_height/2)))
             dis.blit(play_text_image, play_text_image.get_rect(center=(dis_width/2, dis_height/2 + 160)))
+
+            high_score_text = menu_font_style_text.render(f"High Score: {high_score[0]} - {str(high_score[1])}", True, white)
+            dis.blit(high_score_text, high_score_text.get_rect(center=(dis_width/2, 80)))
 
             credits = [
                 menu_font_style_text.render("Created by:", True, gray),
@@ -218,23 +261,48 @@ def gameLoop():
         #
         # Gameover
         while game_screen == 'GameOver':
-            if game_screen is not prev_game_screen:
-                cursor = db.cursor()
-                cursor.execute('''INSERT INTO highscore(name, score)
-                                VALUES(?,?)''', ("AAA", snake.Length - 1))
-                db.commit()
-
             draw_global()
             mesg = menu_font_style_big.render("Game over!", True, white)
             dis.blit(mesg, mesg.get_rect(center=(dis_width/2, dis_height/2)))
 
+            name_header = menu_font_style_text.render("Enter Your Initials", True, white)
+            dis.blit(name_header, name_header.get_rect(center=(dis_width/2, dis_height/2 + 100)))
+
+            background_text = "".join((initials + ['A', 'A', 'A'])[:3])
+            initial_text_position = menu_font_style_text.render(background_text, True, black)
+            dis.blit(initial_text_position, initial_text_position.get_rect(center=(dis_width/2, dis_height/2 + 100 + 75)))
+            
+            initials_rendered = "".join(initials + [letters[active_letter]])
+            initial_text = menu_font_style_text.render(initials_rendered, True, white)
+            dis.blit(initial_text, initial_text_position.get_rect(center=(dis_width/2, dis_height/2 + 100 + 75)))
+
             for event in pygame.event.get():
+                if ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_UP)):
+                    if (active_letter < len(letters) - 1):
+                        active_letter += 1
+                    else:
+                        active_letter = 0
+                if ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_DOWN)):
+                    if (active_letter > 0):
+                        active_letter -= 1
+                    else:
+                        active_letter = len(letters) - 1
+                    
                 if (
                     ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
                     ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
                 ):
-                    game_screen = 'Menu'
-                    gameLoop()
+                    initials.append(letters[active_letter])
+                    
+                    if len(initials) == 3:
+                        cursor = db.cursor()
+                        cursor.execute('''INSERT INTO highscore(name, score)
+                                        VALUES(?,?)''', ("".join(initials), snake.Length - 1))
+                        db.commit()
+
+                        game_screen = 'Menu'
+                        gameLoop()
+                        
 
             update_prev_screen()
             pygame.display.update()
@@ -242,6 +310,13 @@ def gameLoop():
         #
         # Game
         if game_screen == 'Game':
+            if game_screen is not prev_game_screen:
+                initials = []
+                active_letter = 0
+                snake.resetPosition(
+                    get_random_position_x(),
+                    get_random_position_y()
+                )
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit = True
