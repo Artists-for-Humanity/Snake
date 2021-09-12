@@ -138,6 +138,36 @@ def update_prev_screen():
         return True
     return False
 
+def get_button_pressed(event):
+    if event.type == pygame.JOYAXISMOTION:
+        axis = event.axis
+        value = round(event.value)
+
+        if (axis == 0) and (value == 1):
+            return "down"
+        if (axis == 0) and (value == -1):
+            return "left"
+        if (axis == 1) and (value == 1):
+            return "up"
+        if (axis == 1) and (value == -1):
+            return "right"
+        
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT:
+            return "left"
+        elif event.key == pygame.K_RIGHT:
+            return "right"
+        elif event.key == pygame.K_UP:
+            return "up"
+        elif event.key == pygame.K_DOWN:
+            return "down"
+    
+    if (
+        ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
+        ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
+    ):
+        return "c"
+
 
 # Global Variables
 snake = Snake(pygame, dis, snake_block, green)
@@ -248,10 +278,8 @@ def gameLoop():
             dis.blit(snake_img_scaled, snake_img_scaled.get_rect(center=(dis_width/2 + 128, dis_height/2 - 128 - 25)))
 
             for event in pygame.event.get():
-                if (
-                    ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
-                    ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
-                ):
+                button = get_button_pressed(event)
+                if button == 'c':
                     game_screen = 'Game'
                     gameLoop()
 
@@ -277,21 +305,20 @@ def gameLoop():
             dis.blit(initial_text, initial_text_position.get_rect(center=(dis_width/2, dis_height/2 + 100 + 75)))
 
             for event in pygame.event.get():
-                if ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_UP)):
+                button = get_button_pressed(event)
+
+                if button == 'up':
                     if (active_letter < len(letters) - 1):
                         active_letter += 1
                     else:
                         active_letter = 0
-                if ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_DOWN)):
+                if button == 'down':
                     if (active_letter > 0):
                         active_letter -= 1
                     else:
                         active_letter = len(letters) - 1
                     
-                if (
-                    ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
-                    ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
-                ):
+                if button == 'c':
                     initials.append(letters[active_letter])
                     
                     if len(initials) == 3:
@@ -318,35 +345,17 @@ def gameLoop():
                     get_random_position_y()
                 )
             for event in pygame.event.get():
+                button = get_button_pressed(event)
                 if event.type == pygame.QUIT:
                     exit = True
-                if event.type == pygame.JOYAXISMOTION:
-                    axis = event.axis
-                    value = round(event.value)
-                    # print(f"Axis: {str(axis)}, Value: {str(value)}")
-
-                    if (axis == 0) and (value == 1):
-                        snake.moveDown()
-                        print("A")
-                    if (axis == 0) and (value == -1):
-                        snake.moveLeft()
-                        print("B")
-                    if (axis == 1) and (value == 1):
-                        snake.moveUp()
-                        print("C")
-                    if (axis == 1) and (value == -1):
-                        snake.moveRight()
-                        print("D")
-                    
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        snake.moveLeft()
-                    elif event.key == pygame.K_RIGHT:
-                        snake.moveRight()
-                    elif event.key == pygame.K_UP:
-                        snake.moveUp()
-                    elif event.key == pygame.K_DOWN:
-                        snake.moveDown()
+                if button == 'up':
+                    snake.moveUp()
+                if button == 'down':
+                    snake.moveDown()
+                if button == 'left':
+                    snake.moveLeft()
+                if button == 'right':
+                    snake.moveRight()
 
             draw_global()
             draw_scores(high_score, snake.Length - 1)
