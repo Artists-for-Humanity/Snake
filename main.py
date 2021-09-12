@@ -186,8 +186,6 @@ def gameLoop():
         #
         # Menu
         while game_screen == 'Menu':
-            if game_screen is not prev_game_screen:
-                print("MENU SCREEN")
             draw_background()
             title = menu_font_style_big.render("Snake", True, white)
             dis.blit(title, title.get_rect(center=(dis_width/2, dis_height/2)))
@@ -207,6 +205,7 @@ def gameLoop():
             dis.blit(snake_img_scaled, snake_img_scaled.get_rect(center=(dis_width/2 + 128, dis_height/2 - 128 - 25)))
 
             for event in pygame.event.get():
+                print(event)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         exit = True
@@ -218,8 +217,6 @@ def gameLoop():
                     game_screen = 'Game'
                     gameLoop()
 
-            if update_prev_screen():
-                print("SET PREV SCREEN: MENU")
             pygame.display.update()
 
         #
