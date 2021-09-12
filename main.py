@@ -39,8 +39,8 @@ background_color = black
 
 #
 # Display variables
-score_bar_height = 40
-inset = 20
+score_bar_height = 80
+inset = 40
 display = pygame.display.Info()
 fullscreen = my_system.node == 'raspberrypi'
 if fullscreen:
@@ -51,7 +51,7 @@ else:
     dis_width = 1200
     dis_height = 1200
     dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
-bounds = [40, dis_width - inset, dis_height - inset, inset] # top, right, bottom, left
+bounds = [score_bar_height, dis_width - inset, dis_height - inset, inset] # top, right, bottom, left
 print(f"Width: {dis_width}, Height: {dis_height}")
 pygame.mouse.set_visible(False)
 
@@ -69,7 +69,7 @@ play_text_image = pygame.image.load('Images/Play-Text.png')
 #
 # Game variables
 high_score = ('AAA', 0)
-snake_block = 20
+snake_block = 40
 snake_speed = 15
 game_screen = 'Menu'  # 'Menu' 'Game' 'GameOver'
 prev_game_screen = ''
@@ -89,17 +89,11 @@ else:
 # Global Functions
 def draw_score(score):
     value = font_style.render(f"Your score: {str(score)}".upper(), True, green)
-    dis.blit(value, [bounds[3], 8])
+    dis.blit(value, [bounds[3], 8 + 40])
 
 def draw_highscore(score):
     value = font_style.render(f"Highscore: {score[0]} - {str(score[1])}".upper(), True, green)
-    dis.blit(value, [dis_width / 2, 8])
-
-def get_random_position_x():
-    return round(random.randrange(bounds[3], bounds[1] - snake_block) / snake_block) * snake_block
-
-def get_random_position_y():
-    return round(random.randrange(bounds[0], bounds[2] - snake_block) / snake_block) * snake_block
+    dis.blit(value, [dis_width / 2, 8 + 40])
 
 def draw_scores(high_score, score):
     draw_score(score)
@@ -137,6 +131,12 @@ def update_prev_screen():
         prev_game_screen = game_screen
         return True
     return False
+
+def get_random_position_x():
+    return round(random.randrange(bounds[3], bounds[1] - snake_block) / snake_block) * snake_block
+
+def get_random_position_y():
+    return round(random.randrange(bounds[0], bounds[2] - snake_block) / snake_block) * snake_block
 
 def get_button_pressed(event):
     if event.type == pygame.JOYAXISMOTION:
