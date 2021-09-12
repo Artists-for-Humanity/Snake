@@ -205,7 +205,10 @@ def gameLoop():
             dis.blit(snake_img_scaled, snake_img_scaled.get_rect(center=(dis_width/2 + 128, dis_height/2 - 128 - 25)))
 
             for event in pygame.event.get():
-                print(event)
+                if event.type == pygame.JOYAXISMOTION:
+                    axis = event.axis
+                    value = round(event.value)
+                    print(f"Axis: {str(axis)}, Value: {str(value)}")
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         exit = True
