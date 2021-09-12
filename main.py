@@ -41,7 +41,7 @@ background_color = black
 score_bar_height = 40
 inset = 20
 display = pygame.display.Info()
-fullscreen = False
+fullscreen = True
 if fullscreen:
     dis_width = display.current_w #1080
     dis_height = display.current_h #900
