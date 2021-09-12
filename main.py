@@ -211,9 +211,13 @@ def gameLoop():
                     if event.key == pygame.K_q:
                         exit = True
                         game_screen = 'Game'
-                    if event.key == pygame.K_c:
-                        game_screen = 'Game'
-                        gameLoop()
+                if (
+                    ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
+                    ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
+                ):
+                    game_screen = 'Game'
+                    gameLoop()
+
             if update_prev_screen():
                 print("SET PREV SCREEN: MENU")
             pygame.display.update()
@@ -237,9 +241,13 @@ def gameLoop():
                     if event.key == pygame.K_q:
                         exit = True
                         game_screen = 'Game'
-                    if event.key == pygame.K_c:
-                        game_screen = 'Game'
-                        gameLoop()
+
+                if (
+                    ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
+                    ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
+                ):
+                    game_screen = 'Game'
+                    gameLoop()
 
             if update_prev_screen():
                 print("SET PREV SCREEN: GAMEOVER")
@@ -251,7 +259,6 @@ def gameLoop():
         # Game
         if game_screen == 'Game':
             for event in pygame.event.get():
-                # print(event)
                 if event.type == pygame.QUIT:
                     exit = True
                 if event.type == pygame.JOYAXISMOTION:
@@ -261,14 +268,18 @@ def gameLoop():
 
                     if (axis == GAME_PAD_X_AXIS):
                         if (value == 1):
-                            snake.moveRight()
+                            snake.moveDown()
+                            print("A")
                         if (value == -1):
-                            snake.moveUp()
+                            snake.moveLeft()
+                            print("B")
                     if (axis == GAME_PAD_Y_AXIS):
                         if (value == 1):
-                            snake.moveLeft()
+                            snake.moveUp()
+                            print("C")
                         if (value == -1):
-                            snake.moveDown()
+                            snake.moveRight()
+                            print("D")
                     
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
@@ -282,7 +293,6 @@ def gameLoop():
 
             draw_global()
             draw_scores(high_score, snake.Length - 1)
-            score_saved = False
 
             snake.update()
             snake.draw()
