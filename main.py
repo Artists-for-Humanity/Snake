@@ -82,8 +82,6 @@ if (pygame.joystick.get_count() != 0):
     gamepad = pygame.joystick.Joystick(0)
     print(gamepad.get_name())
     gamepad.init()
-    GAME_PAD_Y_AXIS = 2
-    GAME_PAD_X_AXIS = 0
 else:
     print("No gamepad detected")
 
@@ -205,22 +203,22 @@ def gameLoop():
             dis.blit(snake_img_scaled, snake_img_scaled.get_rect(center=(dis_width/2 + 128, dis_height/2 - 128 - 25)))
 
             for event in pygame.event.get():
-                if event.type == pygame.JOYAXISMOTION:
-                    axis = event.axis
-                    value = round(event.value)
-                    print(f"Axis: {str(axis)}, Value: {str(value)}")
-                    if (axis == GAME_PAD_X_AXIS) and (value == 1):
-                        snake.moveDown()
-                        print("A")
-                    if (axis == GAME_PAD_X_AXIS) and (value == -1):
-                        snake.moveLeft()
-                        print("B")
-                    if (axis == GAME_PAD_Y_AXIS) and (value == 1):
-                        snake.moveUp()
-                        print("C")
-                    if (axis == GAME_PAD_Y_AXIS) and (value == -1):
-                        snake.moveRight()
-                        print("D")
+                # if event.type == pygame.JOYAXISMOTION:
+                #     axis = event.axis
+                #     value = round(event.value)
+                #     print(f"Axis: {str(axis)}, Value: {str(value)}")
+                #     if (axis == 0) and (value == 1):
+                #         # snake.moveDown()
+                #         print("A")
+                #     if (axis == 0) and (value == -1):
+                #         # snake.moveLeft()
+                #         print("B")
+                #     if (axis == 1) and (value == 1):
+                #         # snake.moveUp()
+                #         print("C")
+                #     if (axis == 0) and (value == -1):
+                #         # snake.moveRight()
+                #         print("D")
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         exit = True
@@ -278,16 +276,16 @@ def gameLoop():
                     value = round(event.value)
                     # print(f"Axis: {str(axis)}, Value: {str(value)}")
 
-                    if (axis == GAME_PAD_X_AXIS) and (value == 1):
+                    if (axis == 0) and (value == 1):
                         snake.moveDown()
                         print("A")
-                    if (axis == GAME_PAD_X_AXIS) and (value == -1):
+                    if (axis == 0) and (value == -1):
                         snake.moveLeft()
                         print("B")
-                    if (axis == GAME_PAD_Y_AXIS) and (value == 1):
+                    if (axis == 1) and (value == 1):
                         snake.moveUp()
                         print("C")
-                    if (axis == GAME_PAD_Y_AXIS) and (value == -1):
+                    if (axis == 1) and (value == -1):
                         snake.moveRight()
                         print("D")
                     
