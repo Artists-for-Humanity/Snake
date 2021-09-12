@@ -203,26 +203,6 @@ def gameLoop():
             dis.blit(snake_img_scaled, snake_img_scaled.get_rect(center=(dis_width/2 + 128, dis_height/2 - 128 - 25)))
 
             for event in pygame.event.get():
-                # if event.type == pygame.JOYAXISMOTION:
-                #     axis = event.axis
-                #     value = round(event.value)
-                #     print(f"Axis: {str(axis)}, Value: {str(value)}")
-                #     if (axis == 0) and (value == 1):
-                #         # snake.moveDown()
-                #         print("A")
-                #     if (axis == 0) and (value == -1):
-                #         # snake.moveLeft()
-                #         print("B")
-                #     if (axis == 1) and (value == 1):
-                #         # snake.moveUp()
-                #         print("C")
-                #     if (axis == 0) and (value == -1):
-                #         # snake.moveRight()
-                #         print("D")
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        exit = True
-                        game_screen = 'Game'
                 if (
                     ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
                     ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
@@ -230,13 +210,13 @@ def gameLoop():
                     game_screen = 'Game'
                     gameLoop()
 
+            update_prev_screen()
             pygame.display.update()
 
         #
         # Gameover
         while game_screen == 'GameOver':
             if game_screen is not prev_game_screen:
-                print("GAMEOVER SCREEN")
                 cursor = db.cursor()
                 cursor.execute('''INSERT INTO highscore(name, score)
                                 VALUES(?,?)''', ("AAA", snake.Length - 1))
@@ -247,24 +227,16 @@ def gameLoop():
             dis.blit(mesg, mesg.get_rect(center=(dis_width/2, dis_height/2)))
 
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        exit = True
-                        game_screen = 'Game'
-
                 if (
                     ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
                     ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
                 ):
-                    game_screen = 'Game'
+                    game_screen = 'Menu'
                     gameLoop()
 
-            if update_prev_screen():
-                print("SET PREV SCREEN: GAMEOVER")
+            update_prev_screen()
             pygame.display.update()
 
-        if game_screen is not prev_game_screen:
-            print("GAME SCREEN")
         #
         # Game
         if game_screen == 'Game':
@@ -340,8 +312,7 @@ def gameLoop():
                 )
                 snake.increaseLength()
 
-            if update_prev_screen():
-                print("SET PREV SCREEN: GAME")
+            update_prev_screen()
 
         clock.tick(snake_speed)
         pygame.display.update()
