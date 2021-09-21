@@ -44,22 +44,26 @@ inset = 40
 display = pygame.display.Info()
 fullscreen = my_system.node == 'raspberrypi'
 if fullscreen:
-    dis_width = display.current_w #1080
-    dis_height = display.current_h #900
+    dis_width = display.current_w  # 1080
+    dis_height = display.current_h  # 900
     dis = pygame.display.set_mode((dis_width, dis_height), pygame.FULLSCREEN)
 else:
     dis_width = 1200
     dis_height = 1200
     dis = pygame.display.set_mode((dis_width, dis_height), pygame.RESIZABLE)
-bounds = [score_bar_height, dis_width - inset, dis_height - inset, inset] # top, right, bottom, left
+bounds = [score_bar_height, dis_width - inset,
+          dis_height - inset, inset]  # top, right, bottom, left
 print(f"Width: {dis_width}, Height: {dis_height}")
 pygame.mouse.set_visible(False)
 
 #
 # Font
-font_style = pygame.font.Font(str((base_path / 'fonts/OCRAStd.ttf').resolve()), 25)
-menu_font_style_big = pygame.font.Font(str((base_path / 'fonts/MonsterFriendFore.ttf').resolve()), 100)
-menu_font_style_text = pygame.font.Font(str((base_path / 'fonts/MonsterFriendFore.ttf').resolve()), 25)
+font_style = pygame.font.Font(
+    str((base_path / 'fonts/OCRAStd.ttf').resolve()), 25)
+menu_font_style_big = pygame.font.Font(
+    str((base_path / 'fonts/MonsterFriendFore.ttf').resolve()), 100)
+menu_font_style_text = pygame.font.Font(
+    str((base_path / 'fonts/MonsterFriendFore.ttf').resolve()), 25)
 
 #
 # Menu
@@ -87,20 +91,27 @@ else:
 
 #
 # Global Functions
+
+
 def draw_score(score):
     value = font_style.render(f"Your score: {str(score)}".upper(), True, green)
     dis.blit(value, [bounds[3], 8 + 40])
 
+
 def draw_highscore(score):
-    value = font_style.render(f"Highscore: {score[0]} - {str(score[1])}".upper(), True, green)
+    value = font_style.render(
+        f"Highscore: {score[0]} - {str(score[1])}".upper(), True, green)
     dis.blit(value, [dis_width / 2, 8 + 40])
+
 
 def draw_scores(high_score, score):
     draw_score(score)
     draw_highscore(high_score)
 
+
 def draw_background():
     dis.fill(background_color)
+
 
 def draw_global():
     draw_background()
@@ -124,6 +135,7 @@ def draw_global():
         border
     )
 
+
 def update_prev_screen():
     global prev_game_screen
     global game_screen
@@ -132,11 +144,14 @@ def update_prev_screen():
         return True
     return False
 
+
 def get_random_position_x():
     return round(random.randrange(bounds[3], bounds[1] - snake_block) / snake_block) * snake_block
 
+
 def get_random_position_y():
     return round(random.randrange(bounds[0], bounds[2] - snake_block) / snake_block) * snake_block
+
 
 def get_button_pressed(event):
     if event.type == pygame.JOYAXISMOTION:
@@ -151,7 +166,7 @@ def get_button_pressed(event):
             return "up"
         if (axis == 1) and (value == -1):
             return "right"
-        
+
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
             return "left"
@@ -161,7 +176,7 @@ def get_button_pressed(event):
             return "up"
         elif event.key == pygame.K_DOWN:
             return "down"
-    
+
     if (
         ((event.type == pygame.JOYBUTTONDOWN) and (event.button == 0)) or
         ((event.type == pygame.KEYDOWN) and (event.key == pygame.K_c))
@@ -171,9 +186,12 @@ def get_button_pressed(event):
 
 # Global Variables
 snake = Snake(pygame, dis, snake_block, green)
-apple1 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
-apple2 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
-apple3 = Apple(pygame, dis, snake_block, background_color, get_random_position_x(), get_random_position_y())
+apple1 = Apple(pygame, dis, snake_block, background_color,
+               get_random_position_x(), get_random_position_y())
+apple2 = Apple(pygame, dis, snake_block, background_color,
+               get_random_position_x(), get_random_position_y())
+apple3 = Apple(pygame, dis, snake_block, background_color,
+               get_random_position_x(), get_random_position_y())
 
 # Loading the sprite
 coin_sprite1 = pygame.sprite.Group()
@@ -221,6 +239,8 @@ letters = [
 
 #
 # Game Loop
+
+
 def gameLoop():
     global active_letter
     global initials
@@ -259,23 +279,29 @@ def gameLoop():
             draw_background()
             title = menu_font_style_big.render("Snake", True, white)
             dis.blit(title, title.get_rect(center=(dis_width/2, dis_height/2)))
-            dis.blit(play_text_image, play_text_image.get_rect(center=(dis_width/2, dis_height/2 + 160)))
+            dis.blit(play_text_image, play_text_image.get_rect(
+                center=(dis_width/2, dis_height/2 + 160)))
 
-            high_score_text = menu_font_style_text.render(f"High Score: {high_score[0]} - {str(high_score[1])}", True, white)
-            dis.blit(high_score_text, high_score_text.get_rect(center=(dis_width/2, 80)))
+            high_score_text = menu_font_style_text.render(
+                f"High Score: {high_score[0]} - {str(high_score[1])}", True, white)
+            dis.blit(high_score_text, high_score_text.get_rect(
+                center=(dis_width/2, 80)))
 
             credits = [
                 menu_font_style_text.render("Created by:", True, gray),
-                menu_font_style_text.render("Creative Technology Studio", True, gray),
+                menu_font_style_text.render(
+                    "Creative Technology Studio", True, gray),
                 menu_font_style_text.render("Jeremiah Harris", True, gray),
                 menu_font_style_text.render("JQ", True, gray)
             ]
             credits.reverse()
             for i, credit in enumerate(credits):
-                dis.blit(credit, credit.get_rect(center=(dis_width/2, dis_height - 40 - (40 * i))))
+                dis.blit(credit, credit.get_rect(
+                    center=(dis_width/2, dis_height - 40 - (40 * i))))
 
             snake_img_scaled = pygame.transform.scale(snake_img, (256, 256))
-            dis.blit(snake_img_scaled, snake_img_scaled.get_rect(center=(dis_width/2 + 128, dis_height/2 - 128 - 25)))
+            dis.blit(snake_img_scaled, snake_img_scaled.get_rect(
+                center=(dis_width/2 + 128, dis_height/2 - 128 - 25)))
 
             for event in pygame.event.get():
                 button = get_button_pressed(event)
@@ -293,16 +319,22 @@ def gameLoop():
             mesg = menu_font_style_big.render("Game over!", True, white)
             dis.blit(mesg, mesg.get_rect(center=(dis_width/2, dis_height/2)))
 
-            name_header = menu_font_style_text.render("Enter Your Initials", True, white)
-            dis.blit(name_header, name_header.get_rect(center=(dis_width/2, dis_height/2 + 100)))
+            name_header = menu_font_style_text.render(
+                "Enter Your Initials", True, white)
+            dis.blit(name_header, name_header.get_rect(
+                center=(dis_width/2, dis_height/2 + 100)))
 
             background_text = "".join((initials + ['A', 'A', 'A'])[:3])
-            initial_text_position = menu_font_style_text.render(background_text, True, black)
-            dis.blit(initial_text_position, initial_text_position.get_rect(center=(dis_width/2, dis_height/2 + 100 + 75)))
-            
+            initial_text_position = menu_font_style_text.render(
+                background_text, True, black)
+            dis.blit(initial_text_position, initial_text_position.get_rect(
+                center=(dis_width/2, dis_height/2 + 100 + 75)))
+
             initials_rendered = "".join(initials + [letters[active_letter]])
-            initial_text = menu_font_style_text.render(initials_rendered, True, white)
-            dis.blit(initial_text, initial_text_position.get_rect(center=(dis_width/2, dis_height/2 + 100 + 75)))
+            initial_text = menu_font_style_text.render(
+                initials_rendered, True, white)
+            dis.blit(initial_text, initial_text_position.get_rect(
+                center=(dis_width/2, dis_height/2 + 100 + 75)))
 
             for event in pygame.event.get():
                 button = get_button_pressed(event)
@@ -317,10 +349,10 @@ def gameLoop():
                         active_letter -= 1
                     else:
                         active_letter = len(letters) - 1
-                    
+
                 if button == 'c':
                     initials.append(letters[active_letter])
-                    
+
                     if len(initials) == 3:
                         cursor = db.cursor()
                         cursor.execute('''INSERT INTO highscore(name, score)
@@ -329,7 +361,6 @@ def gameLoop():
 
                         game_screen = 'Menu'
                         gameLoop()
-                        
 
             update_prev_screen()
             pygame.display.update()
