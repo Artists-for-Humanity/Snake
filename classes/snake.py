@@ -1,5 +1,6 @@
 import pygame
 
+
 class Snake():
     def __init__(self, pygame, dis, blockSize, color):
         self.pygame = pygame
@@ -24,16 +25,20 @@ class Snake():
         self.Change = [0, 0]
 
     def moveUp(self):
-        self.Change = [0, self.blockSize * -1]
+        if not self.Change == [0, self.blockSize]:
+            self.Change = [0, self.blockSize * -1]
 
     def moveDown(self):
-        self.Change = [0, self.blockSize]
+        if not self.Change == [0, self.blockSize * -1]:
+            self.Change = [0, self.blockSize]
 
     def moveLeft(self):
-        self.Change = [self.blockSize * -1, 0]
+        if not self.Change == [self.blockSize, 0]:
+            self.Change = [self.blockSize * -1, 0]
 
     def moveRight(self):
-        self.Change = [self.blockSize, 0]
+        if not self.Change == [self.blockSize * -1, 0]:
+            self.Change = [self.blockSize, 0]
 
     def increaseLength(self):
         self.Length = self.Length + 1
@@ -55,8 +60,8 @@ class Snake():
         return x == self.LastPos[0] and y == self.LastPos[1]
 
     def isOverlappingItself(self):
-        for x in self.List[:-1]:
-            if x == self.Head:
+        for pos in self.List[:-1]:
+            if pos == self.Head:
                 return True
         return False
 
